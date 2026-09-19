@@ -1,0 +1,97 @@
+@model HSLR.Models.Entities.Event
+@{
+    ViewData["Title"] = "Schedule Event";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb small font-monospace mb-1">
+                <li class="breadcrumb-item"><a asp-action="Index">Events</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Create</li>
+            </ol>
+        </nav>
+        <h2 class="h3 fw-bold text-navy mb-0">Schedule Seminar / Event</h2>
+    </div>
+</div>
+
+<div class="card border-0 rounded-4 shadow-sm p-4 bg-white">
+    <form asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small mb-3"></div>
+
+        <div class="row g-3">
+            <div class="col-12">
+                <label asp-for="Title" class="form-label small fw-bold font-monospace">Event Title</label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Slug" class="form-label small fw-bold font-monospace">Slug</label>
+                <input asp-for="Slug" class="form-control" placeholder="auto-generated if blank" />
+                <span asp-validation-for="Slug" class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-3">
+                <label asp-for="EventType" class="form-label small fw-bold font-monospace">Event Type</label>
+                <select asp-for="EventType" class="form-select" asp-items="Html.GetEnumSelectList<HSLR.Models.Entities.EventType>()"></select>
+            </div>
+
+            <div class="col-md-3">
+                <label asp-for="Status" class="form-label small fw-bold font-monospace">Status</label>
+                <select asp-for="Status" class="form-select" asp-items="Html.GetEnumSelectList<HSLR.Models.Entities.EventStatus>()"></select>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="EventDate" class="form-label small fw-bold font-monospace">Event Start Date & Time (UTC)</label>
+                <input asp-for="EventDate" class="form-control" />
+                <span asp-validation-for="EventDate" class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="EndDate" class="form-label small fw-bold font-monospace">Event End Date & Time (Optional)</label>
+                <input asp-for="EndDate" class="form-control" />
+            </div>
+
+            <div class="col-12">
+                <label asp-for="Location" class="form-label small fw-bold font-monospace">Location / Venue</label>
+                <input asp-for="Location" class="form-control" placeholder="CEWRE Auditorium / Online" />
+                <span asp-validation-for="Location" class="text-danger small"></span>
+            </div>
+
+            <div class="col-12">
+                <label asp-for="Description" class="form-label small fw-bold font-monospace">Description & Agenda</label>
+                <textarea asp-for="Description" rows="4" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Speaker" class="form-label small fw-bold font-monospace">Speaker Name(s)</label>
+                <input asp-for="Speaker" class="form-control" />
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Affiliation" class="form-label small fw-bold font-monospace">Speaker Affiliation</label>
+                <input asp-for="Affiliation" class="form-control" />
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="LinkUrl" class="form-label small fw-bold font-monospace">Registration / Meeting Link URL</label>
+                <input asp-for="LinkUrl" class="form-control" placeholder="https://..." />
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-check mt-4">
+                    <input asp-for="Featured" class="form-check-input" />
+                    <label asp-for="Featured" class="form-check-label small text-secondary">Feature on Home Page</label>
+                </div>
+            </div>
+
+            <div class="col-12 pt-3 border-top d-flex gap-2">
+                <button type="submit" class="btn btn-hsrl-primary">Schedule Event</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>

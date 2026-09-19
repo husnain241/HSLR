@@ -1,0 +1,68 @@
+@model HSLR.Models.Entities.OfficialOpportunity
+@{
+    ViewData["Title"] = "Post Opportunity";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb small font-monospace mb-1">
+                <li class="breadcrumb-item"><a asp-action="Index">Opportunities</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Create</li>
+            </ol>
+        </nav>
+        <h2 class="h3 fw-bold text-navy mb-0">Post Research Opportunity</h2>
+    </div>
+</div>
+
+<div class="card border-0 rounded-4 shadow-sm p-4 bg-white">
+    <form asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small mb-3"></div>
+
+        <div class="row g-3">
+            <div class="col-12">
+                <label asp-for="Title" class="form-label small fw-bold font-monospace">Opportunity Title</label>
+                <input asp-for="Title" class="form-control" placeholder="e.g. Doctoral Fellowship in Physics-Informed Hydrology" />
+                <span asp-validation-for="Title" class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Category" class="form-label small fw-bold font-monospace">Category</label>
+                <input asp-for="Category" class="form-control" placeholder="PhD Position / MS Assistantship / Internship" />
+                <span asp-validation-for="Category" class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-3">
+                <label asp-for="Deadline" class="form-label small fw-bold font-monospace">Application Deadline</label>
+                <input asp-for="Deadline" type="date" class="form-control" />
+            </div>
+
+            <div class="col-md-3">
+                <label asp-for="Status" class="form-label small fw-bold font-monospace">Status</label>
+                <select asp-for="Status" class="form-select" asp-items="Html.GetEnumSelectList<HSLR.Models.Entities.OpportunityStatus>()"></select>
+            </div>
+
+            <div class="col-12">
+                <label asp-for="Description" class="form-label small fw-bold font-monospace">Role Description & Eligibility</label>
+                <textarea asp-for="Description" rows="5" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Link" class="form-label small fw-bold font-monospace">Direct Application / Details Link</label>
+                <input asp-for="Link" class="form-control" placeholder="/collaborate or external link" />
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="DisplayOrder" class="form-label small fw-bold font-monospace">Display Order</label>
+                <input asp-for="DisplayOrder" type="number" class="form-control" />
+            </div>
+
+            <div class="col-12 pt-3 border-top d-flex gap-2">
+                <button type="submit" class="btn btn-hsrl-primary">Publish Opportunity</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>

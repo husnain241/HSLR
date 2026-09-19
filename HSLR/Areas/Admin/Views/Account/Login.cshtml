@@ -1,0 +1,77 @@
+@model HSLR.Areas.Admin.Controllers.LoginViewModel
+@{
+    ViewData["Title"] = "Staff Login";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Staff Login - HSRL Admin Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body style="background: linear-gradient(135deg, #07192d 0%, #0a2540 100%); min-height: 100vh;" class="d-flex align-items-center justify-content-center py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-5 col-lg-4">
+                <div class="text-center mb-4">
+                    <div class="hsrl-brand-icon mx-auto mb-3" style="width: 54px; height: 54px; font-size: 1.5rem;">
+                        <i class="bi bi-shield-lock-fill text-white"></i>
+                    </div>
+                    <h4 class="text-white fw-bold mb-1">HSRL Admin Portal</h4>
+                    <p class="text-white-50 small font-monospace">CEWRE &bull; UET Lahore</p>
+                </div>
+
+                <div class="card border-0 rounded-4 shadow-lg p-4 bg-white">
+                    <form asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+                        @Html.AntiForgeryToken()
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small mb-3"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label small fw-bold text-navy font-monospace"></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-envelope"></i></span>
+                                <input asp-for="Email" class="form-control" placeholder="admin@hsrl.uet.edu.pk" />
+                            </div>
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label small fw-bold text-navy font-monospace"></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-lock"></i></span>
+                                <input asp-for="Password" class="form-control" placeholder="••••••••" />
+                            </div>
+                            <span asp-validation-for="Password" class="text-danger small"></span>
+                        </div>
+
+                        <div class="form-check mb-3">
+                            <input asp-for="RememberMe" class="form-check-input" />
+                            <label asp-for="RememberMe" class="form-check-label small text-secondary">Keep me signed in</label>
+                        </div>
+
+                        <button type="submit" class="btn btn-hsrl-primary w-100 py-2">
+                            <i class="bi bi-box-arrow-in-right me-1"></i> Sign In to Admin Panel
+                        </button>
+                    </form>
+
+                    <div class="mt-4 pt-3 border-top text-center">
+                        <small class="text-muted font-monospace d-block">Default Seed Credentials:</small>
+                        <small class="text-muted font-monospace">admin@hsrl.uet.edu.pk / HsrlAdmin@@2026!</small>
+                    </div>
+                </div>
+
+                <div class="text-center mt-3">
+                    <a asp-area="" asp-controller="Home" asp-action="Index" class="text-white-50 text-decoration-none small">
+                        <i class="bi bi-arrow-left me-1"></i> Back to Public Website
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

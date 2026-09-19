@@ -1,0 +1,78 @@
+@model HSLR.Models.Entities.GalleryItem
+@{
+    ViewData["Title"] = "Add Photo";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb small font-monospace mb-1">
+                <li class="breadcrumb-item"><a asp-action="Index">Gallery</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Create</li>
+            </ol>
+        </nav>
+        <h2 class="h3 fw-bold text-navy mb-0">Upload Photo to Gallery</h2>
+    </div>
+</div>
+
+<div class="card border-0 rounded-4 shadow-sm p-4 bg-white">
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small mb-3"></div>
+
+        <div class="row g-3">
+            <div class="col-12">
+                <label asp-for="Title" class="form-label small fw-bold font-monospace">Photo Title</label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label small fw-bold font-monospace">Upload Image File (JPG, PNG, WEBP)</label>
+                <input type="file" name="imageFile" class="form-control" accept="image/*" />
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="ImageUrl" class="form-label small fw-bold font-monospace">Or specify Relative/Absolute Image URL</label>
+                <input asp-for="ImageUrl" class="form-control" placeholder="/images/gallery/sample.jpg" />
+                <span asp-validation-for="ImageUrl" class="text-danger small"></span>
+            </div>
+
+            <div class="col-12">
+                <label asp-for="AltText" class="form-label small fw-bold font-monospace">Alt Text (Accessibility requirement)</label>
+                <input asp-for="AltText" class="form-control" placeholder="Descriptive alternative text for screen readers" />
+                <span asp-validation-for="AltText" class="text-danger small"></span>
+            </div>
+
+            <div class="col-12">
+                <label asp-for="Caption" class="form-label small fw-bold font-monospace">Caption (Optional)</label>
+                <textarea asp-for="Caption" rows="3" class="form-control"></textarea>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="Category" class="form-label small fw-bold font-monospace">Category</label>
+                <select asp-for="Category" class="form-select" asp-items="Html.GetEnumSelectList<HSLR.Models.Entities.GalleryCategory>()"></select>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="Location" class="form-label small fw-bold font-monospace">Location</label>
+                <input asp-for="Location" class="form-control" placeholder="e.g. Passu Glacier, Hunza" />
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="EventDate" class="form-label small fw-bold font-monospace">Date</label>
+                <input asp-for="EventDate" type="date" class="form-control" />
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="DisplayOrder" class="form-label small fw-bold font-monospace">Display Order</label>
+                <input asp-for="DisplayOrder" type="number" class="form-control" />
+            </div>
+
+            <div class="col-12 pt-3 border-top d-flex gap-2">
+                <button type="submit" class="btn btn-hsrl-primary">Upload & Save</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>

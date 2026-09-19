@@ -1,0 +1,205 @@
+@model HSLR.Models.ViewModels.CollaborationInquiryViewModel
+@{
+    ViewData["Title"] = "Research Collaboration & Contact";
+    var domains = ViewBag.Domains as List<HSLR.Models.Entities.ResearchDomain> ?? new();
+    var sectors = ViewBag.Sectors as List<HSLR.Models.Entities.CollaborationSector> ?? new();
+    var config = ViewBag.Config as HSLR.Models.Entities.SiteConfig ?? new();
+}
+
+<div class="hsrl-page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Collaborate</li>
+            </ol>
+        </nav>
+        <h1>Research Collaboration & Contact</h1>
+        <p>
+            Connect with our faculty, postdoctoral investigators, and computational modeling teams to propose joint research, request technical support, or explore graduate opportunities.
+        </p>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <!-- Collaboration Sectors Overview -->
+    <div class="mb-5">
+        <div class="section-header text-center">
+            <span class="section-eyebrow"><i class="bi bi-people-fill"></i> Sector Engagement</span>
+            <h2 class="section-title">Collaboration Pathways by Sector</h2>
+            <p class="section-lead">Tailored frameworks for researchers, public agencies, international NGOs, and industry.</p>
+        </div>
+
+        <div class="row g-4">
+            @foreach (var sector in sectors)
+            {
+                <div class="col-md-6 col-lg-3">
+                    <div class="hsrl-card p-4">
+                        <div class="hsrl-brand-icon mb-3" style="background: rgba(14, 165, 233, 0.1); color: var(--hsrl-hydro-dark);">
+                            <i class="bi @sector.IconName fs-4"></i>
+                        </div>
+                        <span class="badge bg-light text-dark border font-monospace mb-2">@sector.Category</span>
+                        <h5 class="fw-bold text-navy mb-2">@sector.Title</h5>
+                        <p class="small text-secondary mb-3">@sector.Description</p>
+
+                        @if (sector.EngagementAvenues.Any())
+                        {
+                            <ul class="list-unstyled small text-muted mb-0 pt-2 border-top">
+                                @foreach (var avenue in sector.EngagementAvenues)
+                                {
+                                    <li class="mb-1 d-flex gap-2">
+                                        <i class="bi bi-check text-info"></i>
+                                        <span>@avenue.Avenue</span>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Main Form & Contact Grid -->
+    <div class="row g-5">
+        <!-- Inquiry Form Column -->
+        <div class="col-lg-8">
+            <div class="card border rounded-4 shadow-sm p-4 p-lg-5 bg-white">
+                <div class="mb-4">
+                    <span class="hsrl-badge hsrl-badge-hydro mb-2"><i class="bi bi-send-check"></i> Inquiry Pipeline</span>
+                    <h3 class="fw-bold text-navy mb-1">Submit Research Proposal or Inquiry</h3>
+                    <p class="text-secondary small mb-0">
+                        Submissions are stored directly in the laboratory database and forwarded immediately to our faculty review committee.
+                    </p>
+                </div>
+
+                <form asp-action="Submit" method="post" id="collaborationForm">
+                    @Html.AntiForgeryToken()
+
+                    <!-- Anti-Spam Honeypot Field -->
+                    <div style="display:none !important;" aria-hidden="true">
+                        <label for="WebsiteTrap">Do not fill this field</label>
+                        <input type="text" id="WebsiteTrap" name="WebsiteTrap" value="" tabindex="-1" autocomplete="off" />
+                    </div>
+
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small mb-4" role="alert"></div>
+
+                    <div class="row g-3">
+                        <!-- Full Name -->
+                        <div class="col-md-6">
+                            <label asp-for="FullName" class="form-label small fw-bold text-navy font-monospace"></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-person"></i></span>
+                                <input asp-for="FullName" class="form-control" placeholder="Dr. / Engr. Full Name" />
+                            </div>
+                            <span asp-validation-for="FullName" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Email Address -->
+                        <div class="col-md-6">
+                            <label asp-for="Email" class="form-label small fw-bold text-navy font-monospace"></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-envelope"></i></span>
+                                <input asp-for="Email" type="email" class="form-control" placeholder="name@institution.edu" />
+                            </div>
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Organization / University -->
+                        <div class="col-12">
+                            <label asp-for="Organization" class="form-label small fw-bold text-navy font-monospace"></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-building"></i></span>
+                                <input asp-for="Organization" class="form-control" placeholder="University, Department, Agency, or Organization Name" />
+                            </div>
+                            <span asp-validation-for="Organization" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Affiliation Type -->
+                        <div class="col-md-6">
+                            <label asp-for="AffiliationType" class="form-label small fw-bold text-navy font-monospace"></label>
+                            <select asp-for="AffiliationType" class="form-select" asp-items="Html.GetEnumSelectList<HSLR.Models.Entities.AffiliationType>()"></select>
+                            <span asp-validation-for="AffiliationType" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Collaboration Type -->
+                        <div class="col-md-6">
+                            <label asp-for="CollaborationType" class="form-label small fw-bold text-navy font-monospace"></label>
+                            <select asp-for="CollaborationType" class="form-select" asp-items="Html.GetEnumSelectList<HSLR.Models.Entities.CollaborationType>()"></select>
+                            <span asp-validation-for="CollaborationType" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Research Domain Focus -->
+                        <div class="col-12">
+                            <label asp-for="ResearchDomainId" class="form-label small fw-bold text-navy font-monospace"></label>
+                            <select asp-for="ResearchDomainId" class="form-select">
+                                <option value="">-- General / Multi-Domain Inquiry --</option>
+                                @foreach (var d in domains)
+                                {
+                                    <option value="@d.Id">@d.Title</option>
+                                }
+                            </select>
+                        </div>
+
+                        <!-- Proposal / Subject Title -->
+                        <div class="col-12">
+                            <label asp-for="Title" class="form-label small fw-bold text-navy font-monospace"></label>
+                            <input asp-for="Title" class="form-control" placeholder="Brief subject or proposal title (e.g. Joint HEC Research Grant Proposal)" />
+                            <span asp-validation-for="Title" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Detailed Proposal Description -->
+                        <div class="col-12">
+                            <label asp-for="Description" class="form-label small fw-bold text-navy font-monospace"></label>
+                            <textarea asp-for="Description" rows="5" class="form-control" placeholder="Describe the objectives of your inquiry, study area, proposed role, or graduate qualifications..."></textarea>
+                            <span asp-validation-for="Description" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="col-12 pt-3">
+                            <button type="submit" class="btn btn-hsrl-primary btn-lg w-100 shadow-sm">
+                                <i class="bi bi-send-fill me-2"></i> Submit Inquiry to Laboratory
+                            </button>
+                            <p class="text-muted small text-center mt-2 mb-0 font-monospace">
+                                <i class="bi bi-shield-lock-fill text-success"></i> Secure server-side processing &bull; Data sent directly to HSRL Director Office
+                            </p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Contact Coordinates Column -->
+        <div class="col-lg-4">
+            <!-- Office Card -->
+            <div class="card border rounded-4 shadow-sm p-4 mb-4 bg-white">
+                <h5 class="fw-bold text-navy mb-3"><i class="bi bi-geo-alt-fill text-danger me-2"></i> Physical Location</h5>
+                <p class="small text-secondary mb-3" style="line-height: 1.7;">
+                    <strong>@config.SiteName</strong><br />
+                    @config.Affiliation<br />
+                    @config.Location
+                </p>
+                <div class="p-3 bg-light rounded-3 border small">
+                    <div class="mb-2"><i class="bi bi-envelope-at-fill text-primary me-2"></i> <a href="mailto:@config.ContactEmail" class="text-navy">@config.ContactEmail</a></div>
+                    <div class="mb-2"><i class="bi bi-telephone-fill text-primary me-2"></i> @config.Phone</div>
+                    <div><i class="bi bi-person-badge-fill text-primary me-2"></i> <strong>Director:</strong> @config.DirectorName</div>
+                </div>
+            </div>
+
+            <!-- Visiting & Coordination Policy -->
+            <div class="card border-0 rounded-4 shadow-sm p-4 text-white" style="background: linear-gradient(135deg, var(--hsrl-navy-dark), var(--hsrl-navy));">
+                <h6 class="fw-bold text-white mb-2"><i class="bi bi-clock-history text-info me-1"></i> Response Timeline</h6>
+                <p class="small text-white-50 mb-3" style="line-height: 1.7;">
+                    Official inquiries submitted through this portal are reviewed within 2–3 academic business days. For urgent governmental flood advisory matters, kindly indicate in the proposal title.
+                </p>
+                <div class="p-2 bg-white bg-opacity-10 rounded-2 border border-white border-opacity-10 small font-monospace">
+                    Reference Code: Auto-Generated
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,132 @@
+@model List<HSLR.Models.Entities.Person>
+@{
+    ViewData["Title"] = "Research Family — Team Directory";
+    var selectedCategory = ViewBag.SelectedCategory as HSLR.Models.Entities.PersonCategory?;
+}
+
+<div class="hsrl-page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Research Family</li>
+            </ol>
+        </nav>
+        <h1>Our Research Family</h1>
+        <p>
+            The multidisciplinary faculty, postdoctoral fellows, graduate scholars, and international collaborators driving research at HSRL.
+        </p>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <!-- Filter Pills -->
+    <div class="filter-pills justify-content-center justify-content-md-start mb-4">
+        <a asp-action="Index" class="filter-pill-btn text-decoration-none @(selectedCategory == null ? "active" : "")">
+            All Members (@Model.Count)
+        </a>
+        <a asp-action="Index" asp-route-category="@((int)HSLR.Models.Entities.PersonCategory.LabDirector)" 
+           class="filter-pill-btn text-decoration-none @(selectedCategory == HSLR.Models.Entities.PersonCategory.LabDirector ? "active" : "")">
+            Lab Director
+        </a>
+        <a asp-action="Index" asp-route-category="@((int)HSLR.Models.Entities.PersonCategory.Researcher)" 
+           class="filter-pill-btn text-decoration-none @(selectedCategory == HSLR.Models.Entities.PersonCategory.Researcher ? "active" : "")">
+            Researchers & Postdocs
+        </a>
+        <a asp-action="Index" asp-route-category="@((int)HSLR.Models.Entities.PersonCategory.Phd)" 
+           class="filter-pill-btn text-decoration-none @(selectedCategory == HSLR.Models.Entities.PersonCategory.Phd ? "active" : "")">
+            PhD Scholars
+        </a>
+        <a asp-action="Index" asp-route-category="@((int)HSLR.Models.Entities.PersonCategory.MsMphil)" 
+           class="filter-pill-btn text-decoration-none @(selectedCategory == HSLR.Models.Entities.PersonCategory.MsMphil ? "active" : "")">
+            MS / MPhil Students
+        </a>
+        <a asp-action="Index" asp-route-category="@((int)HSLR.Models.Entities.PersonCategory.Alumni)" 
+           class="filter-pill-btn text-decoration-none @(selectedCategory == HSLR.Models.Entities.PersonCategory.Alumni ? "active" : "")">
+            Alumni
+        </a>
+        <a asp-action="Index" asp-route-category="@((int)HSLR.Models.Entities.PersonCategory.Collaborator)" 
+           class="filter-pill-btn text-decoration-none @(selectedCategory == HSLR.Models.Entities.PersonCategory.Collaborator ? "active" : "")">
+            Collaborators
+        </a>
+    </div>
+
+    <!-- Team Cards Grid -->
+    <div class="row g-4">
+        @foreach (var person in Model)
+        {
+            <div class="col-lg-4 col-md-6">
+                <div class="hsrl-card">
+                    <div class="hsrl-card-body d-flex flex-column">
+                        <div class="d-flex align-items-start gap-3 mb-3">
+                            <div class="hsrl-avatar flex-shrink-0" style="background: @(person.Category == HSLR.Models.Entities.PersonCategory.LabDirector ? "linear-gradient(135deg, var(--hsrl-navy), var(--hsrl-hydro-dark))" : "linear-gradient(135deg, #334155, #64748b)");">
+                                @person.Initials
+                            </div>
+                            <div>
+                                <span class="badge @(person.Category == HSLR.Models.Entities.PersonCategory.LabDirector ? "bg-primary" : "bg-light text-dark border") font-monospace small mb-1">
+                                    @person.Role
+                                </span>
+                                <h5 class="fw-bold mb-0 text-navy">
+                                    @if (person.Category == HSLR.Models.Entities.PersonCategory.LabDirector)
+                                    {
+                                        <a asp-action="Director" class="text-decoration-none text-navy">@person.Name</a>
+                                    }
+                                    else
+                                    {
+                                        @person.Name
+                                    }
+                                </h5>
+                                <small class="text-muted d-block">@person.CurrentAffiliation</small>
+                            </div>
+                        </div>
+
+                        <p class="small text-secondary mb-3 flex-grow-1">
+                            @person.ShortBio
+                        </p>
+
+                        @if (person.ResearchInterests.Any())
+                        {
+                            <div class="mb-3 pt-2 border-top">
+                                <span class="d-block text-uppercase small text-muted fw-bold mb-1 font-monospace" style="font-size: 0.68rem;">Research Interests</span>
+                                <div class="d-flex flex-wrap gap-1">
+                                    @foreach (var interest in person.ResearchInterests)
+                                    {
+                                        <span class="hsrl-badge hsrl-badge-hydro">@interest.Interest</span>
+                                    }
+                                </div>
+                            </div>
+                        }
+
+                        <!-- Social / Academic Links -->
+                        <div class="d-flex justify-content-between align-items-center pt-2 border-top mt-auto">
+                            <div class="d-flex gap-2">
+                                @if (!string.IsNullOrWhiteSpace(person.GoogleScholarUrl))
+                                {
+                                    <a href="@person.GoogleScholarUrl" target="_blank" rel="noopener" class="text-secondary" title="Google Scholar"><i class="bi bi-mortarboard-fill"></i></a>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(person.ResearchGateUrl))
+                                {
+                                    <a href="@person.ResearchGateUrl" target="_blank" rel="noopener" class="text-secondary" title="ResearchGate"><i class="bi bi-journal-text"></i></a>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(person.LinkedInUrl))
+                                {
+                                    <a href="@person.LinkedInUrl" target="_blank" rel="noopener" class="text-secondary" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(person.OrcidUrl))
+                                {
+                                    <a href="@person.OrcidUrl" target="_blank" rel="noopener" class="text-secondary" title="ORCID"><i class="bi bi-person-lines-fill"></i></a>
+                                }
+                            </div>
+                            @if (person.Category == HSLR.Models.Entities.PersonCategory.LabDirector)
+                            {
+                                <a asp-action="Director" class="small fw-semibold text-primary text-decoration-none">
+                                    Full Profile <i class="bi bi-arrow-right"></i>
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /Admin/
+Disallow: /admin/
+Allow: /
+
+Sitemap: https://hsrl.uet.edu.pk/sitemap.xml

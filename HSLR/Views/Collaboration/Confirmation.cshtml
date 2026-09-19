@@ -1,0 +1,81 @@
+@model HSLR.Models.Entities.CollaborationInquiry
+@{
+    ViewData["Title"] = "Inquiry Received — Confirmation";
+    var config = ViewBag.Config as HSLR.Models.Entities.SiteConfig ?? new();
+}
+
+<div class="hsrl-page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Collaboration" asp-action="Index">Collaborate</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Confirmation</li>
+            </ol>
+        </nav>
+        <h1>Inquiry Successfully Submitted</h1>
+        <p>Your research collaboration proposal has been safely logged in our database and routed to laboratory leadership.</p>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border rounded-4 shadow-sm p-4 p-lg-5 bg-white text-center">
+                <div class="hsrl-brand-icon mx-auto mb-3" style="background: rgba(16, 185, 129, 0.12); color: #059669; width: 64px; height: 64px; font-size: 2rem;">
+                    <i class="bi bi-check-circle-fill"></i>
+                </div>
+                <h3 class="fw-bold text-navy mb-2">Thank You, @Model.FullName!</h3>
+                <p class="text-muted lead mb-4">
+                    Your collaboration inquiry has been registered in the HSRL database with tracking reference:
+                </p>
+
+                <div class="p-3 bg-light rounded-3 border d-inline-block mx-auto mb-4 font-monospace fs-4 fw-bold text-primary">
+                    #HSRL-@Model.Id.ToString("D5")
+                </div>
+
+                <!-- Submission Summary Table -->
+                <div class="text-start bg-light p-4 rounded-3 border mb-4">
+                    <h6 class="fw-bold text-navy font-monospace text-uppercase small border-bottom pb-2 mb-3">
+                        Submission Summary
+                    </h6>
+                    <div class="row g-2 small">
+                        <div class="col-sm-4 text-muted fw-bold">Submitted Date:</div>
+                        <div class="col-sm-8 text-dark font-monospace">@Model.SubmittedAtUtc.ToString("yyyy-MM-dd HH:mm:ss") UTC</div>
+
+                        <div class="col-sm-4 text-muted fw-bold">Organization:</div>
+                        <div class="col-sm-8 text-dark">@Model.Organization</div>
+
+                        <div class="col-sm-4 text-muted fw-bold">Email Address:</div>
+                        <div class="col-sm-8 text-dark">@Model.Email</div>
+
+                        <div class="col-sm-4 text-muted fw-bold">Collaboration Type:</div>
+                        <div class="col-sm-8 text-dark"><span class="badge bg-primary">@Model.CollaborationType</span></div>
+
+                        @if (!string.IsNullOrWhiteSpace(Model.Title))
+                        {
+                            <div class="col-sm-4 text-muted fw-bold">Proposal Title:</div>
+                            <div class="col-sm-8 text-dark fw-semibold">@Model.Title</div>
+                        }
+
+                        <div class="col-sm-4 text-muted fw-bold">Status:</div>
+                        <div class="col-sm-8 text-dark"><span class="badge bg-success font-monospace">@Model.Status (Logged)</span></div>
+                    </div>
+                </div>
+
+                <div class="alert alert-info py-3 small text-start mb-4">
+                    <i class="bi bi-info-circle-fill me-2"></i> An automated notification has been dispatched to <strong>@config.ContactEmail</strong>. A confirmation copy has also been sent to <strong>@Model.Email</strong>.
+                </div>
+
+                <div class="d-flex justify-content-center gap-3">
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-hsrl-primary">
+                        <i class="bi bi-house-door-fill me-1"></i> Return to Homepage
+                    </a>
+                    <a asp-controller="Publications" asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-journal-text me-1"></i> Browse Publications
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

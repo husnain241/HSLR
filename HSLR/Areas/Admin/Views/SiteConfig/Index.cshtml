@@ -1,0 +1,94 @@
+@model HSLR.Models.Entities.SiteConfig
+@{
+    ViewData["Title"] = "Site Configuration";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="h3 fw-bold text-navy mb-1">Laboratory Configuration & Metadata</h2>
+        <p class="text-secondary small mb-0">Manage global institutional affiliations, contact coordinates, and social profile links.</p>
+    </div>
+</div>
+
+<div class="card border-0 rounded-4 shadow-sm p-4 bg-white">
+    <form asp-action="Index" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small mb-3"></div>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label asp-for="SiteName" class="form-label small fw-bold font-monospace">Laboratory Official Name</label>
+                <input asp-for="SiteName" class="form-control" />
+                <span asp-validation-for="SiteName" class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Tagline" class="form-label small fw-bold font-monospace">Tagline / Mission Motto</label>
+                <input asp-for="Tagline" class="form-control" />
+                <span asp-validation-for="Tagline" class="text-danger small"></span>
+            </div>
+
+            <div class="col-12">
+                <label asp-for="Affiliation" class="form-label small fw-bold font-monospace">Institutional Affiliation (Department & University)</label>
+                <input asp-for="Affiliation" class="form-control" />
+                <span asp-validation-for="Affiliation" class="text-danger small"></span>
+            </div>
+
+            <div class="col-12">
+                <label asp-for="Description" class="form-label small fw-bold font-monospace">Laboratory Overview & SEO Description</label>
+                <textarea asp-for="Description" rows="3" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="DirectorName" class="form-label small fw-bold font-monospace">Lab Director Name</label>
+                <input asp-for="DirectorName" class="form-control" />
+                <span asp-validation-for="DirectorName" class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="ContactEmail" class="form-label small fw-bold font-monospace">Official Inquiry Email</label>
+                <input asp-for="ContactEmail" type="email" class="form-control" />
+                <span asp-validation-for="ContactEmail" class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="Phone" class="form-label small fw-bold font-monospace">Official Phone</label>
+                <input asp-for="Phone" class="form-control" />
+            </div>
+
+            <div class="col-12">
+                <label asp-for="Location" class="form-label small fw-bold font-monospace">Physical Postal Address</label>
+                <input asp-for="Location" class="form-control" />
+                <span asp-validation-for="Location" class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-3">
+                <label asp-for="TwitterUrl" class="form-label small fw-bold font-monospace">Twitter / X URL</label>
+                <input asp-for="TwitterUrl" class="form-control" />
+            </div>
+
+            <div class="col-md-3">
+                <label asp-for="LinkedInUrl" class="form-label small fw-bold font-monospace">LinkedIn URL</label>
+                <input asp-for="LinkedInUrl" class="form-control" />
+            </div>
+
+            <div class="col-md-3">
+                <label asp-for="GoogleScholarUrl" class="form-label small fw-bold font-monospace">Google Scholar Profile URL</label>
+                <input asp-for="GoogleScholarUrl" class="form-control" />
+            </div>
+
+            <div class="col-md-3">
+                <label asp-for="GitHubUrl" class="form-label small fw-bold font-monospace">GitHub Profile URL</label>
+                <input asp-for="GitHubUrl" class="form-control" />
+            </div>
+
+            <div class="col-12 pt-3 border-top d-flex gap-2">
+                <button type="submit" class="btn btn-hsrl-primary">
+                    <i class="bi bi-check-lg me-1"></i> Update Site Settings
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

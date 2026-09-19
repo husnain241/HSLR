@@ -1,0 +1,134 @@
+@model List<HSLR.Models.Entities.Project>
+@{
+    ViewData["Title"] = "Research Projects Portfolio";
+    var selectedStatus = ViewBag.SelectedStatus as HSLR.Models.Entities.ProjectStatus?;
+    var selectedType = ViewBag.SelectedType as HSLR.Models.Entities.ProjectType?;
+    var selectedDomainId = ViewBag.SelectedDomainId as int?;
+    var domains = ViewBag.Domains as List<HSLR.Models.Entities.ResearchDomain> ?? new();
+}
+
+<div class="hsrl-page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Projects</li>
+            </ol>
+        </nav>
+        <h1>Research & Applied Projects</h1>
+        <p>
+            Explore our portfolio of fundamental, applied, and collaborative research initiatives addressing water resources, flood inundation, and cryospheric sensing.
+        </p>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <!-- Filters Card -->
+    <div class="card border rounded-4 shadow-sm p-4 mb-4 bg-white">
+        <form method="get" asp-action="Index" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label small fw-bold text-navy font-monospace">Project Status</label>
+                <select name="status" class="form-select">
+                    <option value="">All Statuses</option>
+                    @foreach (var s in Enum.GetValues<HSLR.Models.Entities.ProjectStatus>())
+                    {
+                        <option value="@((int)s)" selected="@(selectedStatus == s ? "selected" : null)">@s</option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label small fw-bold text-navy font-monospace">Project Type</label>
+                <select name="type" class="form-select">
+                    <option value="">All Types</option>
+                    @foreach (var t in Enum.GetValues<HSLR.Models.Entities.ProjectType>())
+                    {
+                        <option value="@((int)t)" selected="@(selectedType == t ? "selected" : null)">@t</option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label small fw-bold text-navy font-monospace">Research Domain</label>
+                <select name="domainId" class="form-select">
+                    <option value="">All Domains</option>
+                    @foreach (var d in domains)
+                    {
+                        <option value="@d.Id" selected="@(selectedDomainId == d.Id ? "selected" : null)">@d.Title</option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-12 d-flex justify-content-end gap-2 pt-2 border-top">
+                <button type="submit" class="btn btn-hsrl-primary"><i class="bi bi-funnel-fill me-1"></i> Filter Projects</button>
+                <a asp-action="Index" class="btn btn-outline-secondary"><i class="bi bi-x-circle me-1"></i> Reset</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Showing count -->
+    <div class="mb-4 small text-muted font-monospace">
+        Showing <strong>@Model.Count</strong> research initiatives
+    </div>
+
+    <!-- Projects Grid -->
+    <div class="row g-4">
+        @foreach (var proj in Model)
+        {
+            <div class="col-lg-6">
+                <div class="hsrl-card">
+                    <div class="hsrl-card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="hsrl-badge @(proj.Status == HSLR.Models.Entities.ProjectStatus.Active ? "hsrl-badge-success" : "hsrl-badge-hydro")">
+                                <i class="bi bi-record-circle-fill"></i> @proj.Status
+                            </span>
+                            <span class="badge bg-light text-muted border font-monospace">@proj.ProjectType &bull; @proj.Year</span>
+                        </div>
+
+                        <h4 class="fw-bold mb-2">
+                            <a asp-action="Details" asp-route-slug="@proj.Slug" class="text-decoration-none text-navy">
+                                @proj.Title
+                            </a>
+                        </h4>
+
+                        <div class="small text-secondary mb-3">
+                            <i class="bi bi-geo-alt-fill text-danger me-1"></i> <strong>Study Area:</strong> @proj.StudyArea, @proj.Country
+                        </div>
+
+                        <p class="small text-muted mb-3 flex-grow-1">
+                            @(proj.Subtitle ?? proj.Challenge)
+                        </p>
+
+                        <!-- Research Areas -->
+                        @if (proj.ProjectResearchAreas.Any())
+                        {
+                            <div class="d-flex flex-wrap gap-1 mb-3">
+                                @foreach (var pra in proj.ProjectResearchAreas)
+                                {
+                                    <span class="hsrl-badge hsrl-badge-hydro">@pra.ResearchDomain?.Title</span>
+                                }
+                            </div>
+                        }
+
+                        <!-- Technologies -->
+                        @if (proj.Technologies.Any())
+                        {
+                            <div class="d-flex flex-wrap gap-1 pt-2 border-top">
+                                @foreach (var tech in proj.Technologies)
+                                {
+                                    <span class="badge bg-light text-dark border font-monospace" style="font-size: 0.7rem;">@tech.TechnologyName</span>
+                                }
+                            </div>
+                        }
+                    </div>
+                    <div class="hsrl-card-footer d-flex justify-content-between align-items-center">
+                        <span class="small text-muted font-monospace">Case Study</span>
+                        <a asp-action="Details" asp-route-slug="@proj.Slug" class="btn btn-sm btn-hsrl-outline">
+                            View Case Study <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

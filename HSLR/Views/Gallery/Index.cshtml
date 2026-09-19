@@ -1,0 +1,132 @@
+@model List<HSLR.Models.Entities.GalleryItem>
+@{
+    ViewData["Title"] = "Scientific Gallery & Fieldwork";
+    var selectedCategory = ViewBag.SelectedCategory as HSLR.Models.Entities.GalleryCategory?;
+}
+
+<div class="hsrl-page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Gallery</li>
+            </ol>
+        </nav>
+        <h1>Fieldwork & Research Gallery</h1>
+        <p>
+            Visual records from our high-altitude glaciological expeditions, river discharge gauging campaigns, computer lab workshops, and stakeholder conferences.
+        </p>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <!-- Category Filter Pills -->
+    <div class="filter-pills justify-content-center justify-content-md-start mb-4">
+        <a asp-action="Index" class="filter-pill-btn text-decoration-none @(selectedCategory == null ? "active" : "")">
+            All Categories (@Model.Count)
+        </a>
+        @foreach (var cat in Enum.GetValues<HSLR.Models.Entities.GalleryCategory>())
+        {
+            <a asp-action="Index" asp-route-category="@((int)cat)" 
+               class="filter-pill-btn text-decoration-none @(selectedCategory == cat ? "active" : "")">
+                @cat
+            </a>
+        }
+    </div>
+
+    <!-- Gallery Grid -->
+    <div class="row g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-6 col-lg-4">
+                <div class="hsrl-card">
+                    <!-- Image Display / Placeholder -->
+                    <div class="position-relative overflow-hidden bg-dark" style="height: 220px; cursor: pointer;"
+                         data-bs-toggle="modal" data-bs-target="#galleryModal"
+                         data-title="@item.Title"
+                         data-caption="@(item.Caption ?? item.AltText)"
+                         data-location="@item.Location"
+                         data-date="@(item.EventDate?.ToString("yyyy-MM-dd") ?? "")"
+                         data-category="@item.Category">
+                        
+                        <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-white text-center p-3"
+                             style="background: linear-gradient(135deg, #0f2b48, #0a192f);">
+                            <i class="bi bi-camera-fill fs-1 text-info opacity-75 mb-2"></i>
+                            <span class="small fw-semibold text-white px-3">@item.Title</span>
+                            <span class="badge bg-light text-dark font-monospace mt-2" style="font-size: 0.65rem;">Click to Preview</span>
+                        </div>
+
+                        <span class="position-absolute top-0 end-0 m-2 badge bg-dark bg-opacity-75 text-white font-monospace" style="font-size: 0.7rem;">
+                            @item.Category
+                        </span>
+                    </div>
+
+                    <div class="hsrl-card-body">
+                        <h6 class="fw-bold mb-1 text-navy">@item.Title</h6>
+                        @if (!string.IsNullOrWhiteSpace(item.Location))
+                        {
+                            <div class="small text-muted mb-2">
+                                <i class="bi bi-geo-alt-fill text-danger me-1"></i> @item.Location
+                            </div>
+                        }
+                        <p class="small text-secondary mb-0">
+                            @(item.Caption ?? item.AltText)
+                        </p>
+                    </div>
+
+                    @if (item.EventDate.HasValue)
+                    {
+                        <div class="hsrl-card-footer d-flex justify-content-between align-items-center py-2">
+                            <span class="small text-muted font-monospace"><i class="bi bi-calendar3 me-1"></i> @item.EventDate.Value.ToString("MMM yyyy")</span>
+                            <span class="badge bg-light text-secondary border font-monospace" style="font-size: 0.65rem;">Archived</span>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Lightbox Modal -->
+<div class="modal fade" id="galleryModal" tabindex="-1" aria-labelledby="galleryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
+            <div class="modal-header bg-dark text-white border-0 py-3">
+                <h5 class="modal-title h6 fw-bold" id="galleryModalTitle">Photo Preview</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0 bg-dark text-center">
+                <div class="p-5 d-flex flex-column align-items-center justify-content-center text-white" style="min-height: 280px; background: linear-gradient(135deg, #07192d, #0f3962);">
+                    <i class="bi bi-image fs-1 text-info mb-3"></i>
+                    <h5 id="galleryModalHeading" class="fw-bold px-3"></h5>
+                    <div id="galleryModalMeta" class="small text-white-50 font-monospace mt-2"></div>
+                </div>
+            </div>
+            <div class="modal-footer bg-white border-top p-3 justify-content-between">
+                <p id="galleryModalCaption" class="small text-secondary mb-0 text-start"></p>
+                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const galleryModal = document.getElementById('galleryModal');
+        if (galleryModal) {
+            galleryModal.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const title = button.getAttribute('data-title');
+                const caption = button.getAttribute('data-caption');
+                const location = button.getAttribute('data-location');
+                const date = button.getAttribute('data-date');
+                const category = button.getAttribute('data-category');
+
+                document.getElementById('galleryModalTitle').textContent = category + ' Record';
+                document.getElementById('galleryModalHeading').textContent = title;
+                document.getElementById('galleryModalMeta').textContent = (location ? location + ' | ' : '') + (date ? date : '');
+                document.getElementById('galleryModalCaption').textContent = caption;
+            });
+        }
+    </script>
+}

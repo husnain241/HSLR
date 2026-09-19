@@ -1,0 +1,125 @@
+@model List<HSLR.Models.Entities.CollaborationInquiry>
+@{
+    ViewData["Title"] = "Inquiry Management Pipeline";
+    var selectedStatus = ViewBag.SelectedStatus as HSLR.Models.Entities.InquiryStatus?;
+    var showSpam = (bool)(ViewBag.ShowSpam ?? false);
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="h3 fw-bold text-navy mb-1">Collaboration Inquiries Pipeline</h2>
+        <p class="text-secondary small mb-0">Review, update, and manage external partnership proposals and prospective student requests.</p>
+    </div>
+</div>
+
+<!-- Filter Tabs -->
+<div class="card border-0 rounded-4 shadow-sm p-3 mb-4 bg-white">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <div class="d-flex flex-wrap gap-2">
+            <a asp-action="Index" asp-route-showSpam="@showSpam" class="btn btn-sm @(selectedStatus == null ? "btn-hsrl-primary" : "btn-light border")">
+                All Active (@Model.Count)
+            </a>
+            @foreach (var s in Enum.GetValues<HSLR.Models.Entities.InquiryStatus>())
+            {
+                <a asp-action="Index" asp-route-status="@((int)s)" asp-route-showSpam="@showSpam" 
+                   class="btn btn-sm @(selectedStatus == s ? "btn-hsrl-primary" : "btn-light border")">
+                    @s
+                </a>
+            }
+        </div>
+
+        <div>
+            @if (showSpam)
+            {
+                <a asp-action="Index" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-shield-check me-1"></i> Hide Spam
+                </a>
+            }
+            else
+            {
+                <a asp-action="Index" asp-route-showSpam="true" class="btn btn-sm btn-outline-danger">
+                    <i class="bi bi-trash-fill me-1"></i> View Spam Inquiries
+                </a>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Table Card -->
+<div class="card border-0 rounded-4 shadow-sm bg-white overflow-hidden">
+    @if (!Model.Any())
+    {
+        <div class="p-5 text-center text-muted">
+            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+            No inquiries match the current filter selection.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light small font-monospace text-muted">
+                    <tr>
+                        <th class="ps-4">Reference</th>
+                        <th>Submitter & Organization</th>
+                        <th>Type & Domain</th>
+                        <th>Submitted (UTC)</th>
+                        <th>Status</th>
+                        <th class="text-end pe-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    @foreach (var inq in Model)
+                    {
+                        <tr class="@(inq.Status == HSLR.Models.Entities.InquiryStatus.New ? "table-light fw-semibold" : "")">
+                            <td class="ps-4 font-monospace fw-bold text-primary">
+                                #HSRL-@inq.Id.ToString("D5")
+                                @if (inq.IsSpam)
+                                {
+                                    <span class="badge bg-danger ms-1" style="font-size: 0.6rem;">SPAM</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="text-navy fw-bold">@inq.FullName</div>
+                                <div class="text-muted small"><i class="bi bi-envelope me-1"></i> @inq.Email</div>
+                                <div class="text-secondary small"><i class="bi bi-building me-1"></i> @inq.Organization</div>
+                            </td>
+                            <td>
+                                <span class="badge bg-light text-dark border mb-1">@inq.CollaborationType</span>
+                                @if (inq.ResearchDomain != null)
+                                {
+                                    <div class="text-muted small font-monospace">@inq.ResearchDomain.Title</div>
+                                }
+                            </td>
+                            <td class="font-monospace text-muted">
+                                @inq.SubmittedAtUtc.ToString("yyyy-MM-dd HH:mm")
+                            </td>
+                            <td>
+                                @switch (inq.Status)
+                                {
+                                    case HSLR.Models.Entities.InquiryStatus.New:
+                                        <span class="badge bg-danger font-monospace">New</span>
+                                        break;
+                                    case HSLR.Models.Entities.InquiryStatus.Reviewed:
+                                        <span class="badge bg-warning text-dark font-monospace">Reviewed</span>
+                                        break;
+                                    case HSLR.Models.Entities.InquiryStatus.Responded:
+                                        <span class="badge bg-success font-monospace">Responded</span>
+                                        break;
+                                    case HSLR.Models.Entities.InquiryStatus.Archived:
+                                        <span class="badge bg-secondary font-monospace">Archived</span>
+                                        break;
+                                }
+                            </td>
+                            <td class="text-end pe-4">
+                                <a asp-action="Details" asp-route-id="@inq.Id" class="btn btn-sm btn-hsrl-primary">
+                                    <i class="bi bi-eye-fill me-1"></i> Details
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

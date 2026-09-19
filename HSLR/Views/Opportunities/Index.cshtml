@@ -1,0 +1,129 @@
+@{
+    ViewData["Title"] = "Open Positions & Research Opportunities";
+    var openPositions = ViewBag.OpenPositions as List<HSLR.Models.Entities.OfficialOpportunity> ?? new();
+    var pathways = ViewBag.Pathways as List<HSLR.Models.Entities.OpportunityCategory> ?? new();
+}
+
+<div class="hsrl-page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Opportunities</li>
+            </ol>
+        </nav>
+        <h1>Research Opportunities & Open Positions</h1>
+        <p>
+            Join the Hydroclimatic Sensing Research Lab at CEWRE, UET Lahore. We welcome ambitious graduate scholars, postdoctoral researchers, and student interns.
+        </p>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <!-- Active Open Positions Section -->
+    <div class="mb-5">
+        <div class="section-header">
+            <span class="section-eyebrow"><i class="bi bi-briefcase-fill"></i> Current Vacancies</span>
+            <h2 class="section-title">Funded Positions & Research Calls</h2>
+            <p class="section-lead">Actively recruiting candidates for project-linked graduate scholarships and technical roles.</p>
+        </div>
+
+        @if (!openPositions.Any())
+        {
+            <div class="p-4 bg-white rounded-4 border text-center text-muted">
+                No specific vacancies are advertised currently. However, spontaneous applications for PhD and MS research are accepted year-round via our collaboration portal.
+            </div>
+        }
+        else
+        {
+            <div class="vstack gap-3">
+                @foreach (var opp in openPositions)
+                {
+                    <div class="card border rounded-4 shadow-sm p-4 bg-white">
+                        <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-2">
+                            <div>
+                                <span class="badge @(opp.Status == HSLR.Models.Entities.OpportunityStatus.Open ? "bg-success" : "bg-secondary") font-monospace me-2">
+                                    @opp.Status
+                                </span>
+                                <span class="badge bg-light text-dark border font-monospace">@opp.Category</span>
+                            </div>
+                            @if (opp.Deadline.HasValue)
+                            {
+                                <span class="meta-chip text-danger">
+                                    <i class="bi bi-alarm-fill"></i> Deadline: @opp.Deadline.Value.ToString("dd MMMM yyyy")
+                                </span>
+                            }
+                        </div>
+
+                        <h4 class="h5 fw-bold text-navy mb-2">@opp.Title</h4>
+                        <p class="text-secondary small mb-3" style="line-height: 1.7;">
+                            @opp.Description
+                        </p>
+
+                        <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-auto">
+                            <span class="small text-muted font-monospace"><i class="bi bi-geo-alt"></i> CEWRE, UET Lahore</span>
+                            <a asp-controller="Collaboration" asp-action="Index" class="btn btn-sm btn-hsrl-primary">
+                                <i class="bi bi-send-fill me-1"></i> Apply / Submit CV
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+    <!-- Recurring Engagement Pathways -->
+    <div class="mb-5">
+        <div class="section-header text-center">
+            <span class="section-eyebrow"><i class="bi bi-mortarboard-fill"></i> Academic Pathways</span>
+            <h2 class="section-title">Recurring Engagement Pathways</h2>
+            <p class="section-lead">Structured degree and training programs through CEWRE UET Lahore.</p>
+        </div>
+
+        <div class="row g-4">
+            @foreach (var path in pathways)
+            {
+                <div class="col-md-6">
+                    <div class="hsrl-card p-4">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span class="badge bg-primary text-white font-monospace">@path.EngagementType</span>
+                            <h5 class="fw-bold mb-0 text-navy">@path.Title</h5>
+                        </div>
+                        <p class="small text-secondary mb-3">@path.ShortDescription</p>
+
+                        @if (path.RecurringPathways.Any())
+                        {
+                            <ul class="list-unstyled small text-muted mb-0 pt-2 border-top">
+                                @foreach (var item in path.RecurringPathways)
+                                {
+                                    <li class="mb-2 d-flex gap-2 align-items-start">
+                                        <i class="bi bi-check2-circle text-info mt-1"></i>
+                                        <span>@item.Pathway</span>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Application Guidance Banner -->
+    <div class="card border-0 rounded-4 p-4 p-lg-5 text-white" style="background: linear-gradient(135deg, var(--hsrl-navy-dark), var(--hsrl-navy));">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-8">
+                <span class="hsrl-hero-tag mb-2"><i class="bi bi-info-circle-fill text-info"></i> How to Apply</span>
+                <h3 class="fw-bold mb-2">Interested in Joining HSRL?</h3>
+                <p class="text-white-50 mb-0 small" style="line-height: 1.7;">
+                    Prospective PhD and MS researchers should submit a concise statement of research interest, updated curriculum vitae (CV), and academic transcripts through our online portal. Candidates with prior programming experience in Python, GIS, or numerical hydrology are strongly favored.
+                </p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <a asp-controller="Collaboration" asp-action="Index" class="btn btn-hsrl-hydro btn-lg">
+                    <i class="bi bi-file-earmark-person-fill me-1"></i> Submit Expression of Interest
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

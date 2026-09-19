@@ -1,0 +1,171 @@
+@inject HSLR.Data.HsrlDbContext DbContext
+@{
+    var newInquiriesCount = DbContext.CollaborationInquiries.Count(i => i.Status == HSLR.Models.Entities.InquiryStatus.New && !i.IsSpam);
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - HSRL Admin Panel</title>
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        body {
+            background-color: #f1f5f9;
+        }
+        .admin-sidebar {
+            width: 260px;
+            min-height: 100vh;
+            background-color: #081a2e;
+            color: #94a3b8;
+            flex-shrink: 0;
+            border-right: 1px solid #1e293b;
+        }
+        .admin-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 16px;
+            color: #94a3b8;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.15s ease;
+            margin-bottom: 2px;
+        }
+        .admin-nav-link:hover, .admin-nav-link.active {
+            background-color: rgba(14, 165, 233, 0.15);
+            color: #38bdf8;
+        }
+        .admin-nav-header {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #64748b;
+            font-weight: 700;
+            padding: 12px 16px 4px 16px;
+            font-family: var(--hsrl-font-mono);
+        }
+        .admin-topbar {
+            background-color: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 12px 24px;
+        }
+    </style>
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <div class="d-flex">
+        <!-- Sidebar Navigation -->
+        <aside class="admin-sidebar p-3 d-flex flex-column">
+            <div class="d-flex align-items-center gap-2 mb-4 px-2 pt-2">
+                <div class="hsrl-brand-icon" style="width: 38px; height: 38px; font-size: 1.1rem;">
+                    <i class="bi bi-shield-lock-fill text-white"></i>
+                </div>
+                <div>
+                    <h6 class="text-white fw-bold mb-0">HSRL ADMIN</h6>
+                    <small class="text-white-50 font-monospace" style="font-size: 0.65rem;">Content Manager</small>
+                </div>
+            </div>
+
+            <nav class="flex-grow-1">
+                <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="admin-nav-link">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+                <a asp-area="Admin" asp-controller="Inquiries" asp-action="Index" class="admin-nav-link justify-content-between">
+                    <span><i class="bi bi-inbox-fill"></i> Inquiries</span>
+                    @if (newInquiriesCount > 0)
+                    {
+                        <span class="badge bg-danger rounded-pill font-monospace">@newInquiriesCount</span>
+                    }
+                </a>
+
+                <div class="admin-nav-header">Content Modules</div>
+                <a asp-area="Admin" asp-controller="People" asp-action="Index" class="admin-nav-link">
+                    <i class="bi bi-people-fill"></i> People / Team
+                </a>
+                <a asp-area="Admin" asp-controller="Publications" asp-action="Index" class="admin-nav-link">
+                    <i class="bi bi-journal-text"></i> Publications
+                </a>
+                <a asp-area="Admin" asp-controller="Projects" asp-action="Index" class="admin-nav-link">
+                    <i class="bi bi-briefcase-fill"></i> Projects
+                </a>
+                <a asp-area="Admin" asp-controller="Events" asp-action="Index" class="admin-nav-link">
+                    <i class="bi bi-calendar-event-fill"></i> Events & Fieldwork
+                </a>
+                <a asp-area="Admin" asp-controller="Gallery" asp-action="Index" class="admin-nav-link">
+                    <i class="bi bi-images"></i> Photo Gallery
+                </a>
+
+                <div class="admin-nav-header">Laboratory Core</div>
+                <a asp-area="Admin" asp-controller="ResearchDomains" asp-action="Index" class="admin-nav-link">
+                    <i class="bi bi-diagram-3-fill"></i> Research Domains
+                </a>
+                <a asp-area="Admin" asp-controller="Opportunities" asp-action="Index" class="admin-nav-link">
+                    <i class="bi bi-mortarboard-fill"></i> Opportunities
+                </a>
+                <a asp-area="Admin" asp-controller="SiteConfig" asp-action="Index" class="admin-nav-link">
+                    <i class="bi bi-gear-fill"></i> Site Configuration
+                </a>
+            </nav>
+
+            <div class="pt-3 border-top border-secondary border-opacity-25 mt-auto">
+                <a asp-area="" asp-controller="Home" asp-action="Index" target="_blank" class="admin-nav-link text-white-50">
+                    <i class="bi bi-box-arrow-up-right"></i> View Public Website
+                </a>
+                <a asp-area="Admin" asp-controller="Account" asp-action="Logout" class="admin-nav-link text-danger">
+                    <i class="bi bi-box-arrow-right"></i> Sign Out
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="flex-grow-1 d-flex flex-column min-vh-100 overflow-hidden">
+            <!-- Topbar -->
+            <header class="admin-topbar d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge bg-light text-muted border font-monospace">HSRL Control Center</span>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <span class="small text-secondary"><i class="bi bi-person-circle me-1"></i> @User.Identity?.Name</span>
+                </div>
+            </header>
+
+            <!-- Body Container -->
+            <main class="p-4 p-lg-5 flex-grow-1">
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="bi bi-check-circle-fill me-2"></i> @TempData["SuccessMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i> @TempData["ErrorMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

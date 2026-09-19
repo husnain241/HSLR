@@ -1,0 +1,219 @@
+@inject HSLR.Data.HsrlDbContext DbContext
+@{
+    var config = DbContext.SiteConfigs.FirstOrDefault() ?? new HSLR.Models.Entities.SiteConfig();
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - @config.SiteName</title>
+    <meta name="description" content="@(ViewData["MetaDescription"] ?? config.Description)" />
+    
+    <!-- Academic Typography & Bootstrap Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <!-- Academic Topbar -->
+    <div class="hsrl-topbar d-none d-md-block">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-3">
+                <span><i class="bi bi-mortarboard-fill me-1 text-info"></i> @config.Affiliation</span>
+                <span class="text-white-50">|</span>
+                <span><i class="bi bi-geo-alt-fill me-1 text-danger"></i> Lahore, Pakistan</span>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <a href="mailto:@config.ContactEmail"><i class="bi bi-envelope-fill me-1"></i> @config.ContactEmail</a>
+                <span class="text-white-50">|</span>
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="badge bg-warning text-dark text-decoration-none">
+                        <i class="bi bi-shield-lock-fill"></i> Admin Panel
+                    </a>
+                    <a asp-area="Admin" asp-controller="Account" asp-action="Logout" class="text-white-50">Logout</a>
+                }
+                else
+                {
+                    <a asp-area="Admin" asp-controller="Account" asp-action="Login" class="text-white-50">
+                        <i class="bi bi-lock-fill me-1"></i> Staff Login
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Navigation Header -->
+    <header class="sticky-top">
+        <nav class="navbar navbar-expand-lg hsrl-navbar">
+            <div class="container">
+                <a class="hsrl-brand" asp-controller="Home" asp-action="Index">
+                    <div class="hsrl-brand-icon">
+                        <i class="bi bi-water"></i>
+                    </div>
+                    <div class="hsrl-brand-text">
+                        <span class="hsrl-brand-title">HSRL</span>
+                        <span class="hsrl-brand-sub">CEWRE &bull; UET LAHORE</span>
+                    </div>
+                </a>
+
+                <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#hsrlNavbarContent"
+                        aria-controls="hsrlNavbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="hsrlNavbarContent">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-1">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                About & Team
+                            </a>
+                            <ul class="dropdown-menu border-0 shadow-sm">
+                                <li><a class="dropdown-item py-2" asp-controller="Team" asp-action="Director"><i class="bi bi-person-badge me-2 text-primary"></i> Lab Director</a></li>
+                                <li><a class="dropdown-item py-2" asp-controller="Team" asp-action="Index"><i class="bi bi-people me-2 text-primary"></i> Research Family</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Research" asp-action="Index">Research</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Projects" asp-action="Index">Projects</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Publications" asp-action="Index">Publications</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Events" asp-action="Index">Events</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Gallery" asp-action="Index">Gallery</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Opportunities" asp-action="Index">Opportunities</a>
+                        </li>
+                        <li class="nav-item ms-lg-2">
+                            <a class="nav-link nav-cta-btn" asp-controller="Collaboration" asp-action="Index">
+                                <i class="bi bi-send me-1"></i> Collaborate
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Page Content -->
+    <main role="main">
+        @RenderBody()
+    </main>
+
+    <!-- Academic Footer -->
+    <footer class="hsrl-footer">
+        <div class="container">
+            <div class="row g-4 mb-4">
+                <!-- Lab Overview -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <div class="hsrl-brand-icon" style="width: 36px; height: 36px; font-size: 1rem;">
+                            <i class="bi bi-water"></i>
+                        </div>
+                        <h5 class="mb-0 text-white">HSRL</h5>
+                    </div>
+                    <p class="text-light small mb-3">
+                        @config.SiteName is an academic research facility advancing satellite remote sensing, hydrological modeling, AI/ML, and climate analytics to address critical water security in the Indus Basin.
+                    </p>
+                    <div class="d-flex align-items-center gap-2 text-light small">
+                        <i class="bi bi-building-fill text-info"></i>
+                        <span>@config.Affiliation</span>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-lg-2 col-md-6">
+                    <h5>Navigation</h5>
+                    <ul>
+                        <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li><a asp-controller="Research" asp-action="Index">Research Domains</a></li>
+                        <li><a asp-controller="Projects" asp-action="Index">Research Projects</a></li>
+                        <li><a asp-controller="Publications" asp-action="Index">Publications</a></li>
+                        <li><a asp-controller="Team" asp-action="Index">Research Family</a></li>
+                        <li><a asp-controller="Team" asp-action="Director">Lab Director</a></li>
+                    </ul>
+                </div>
+
+                <!-- Engagement & Opportunities -->
+                <div class="col-lg-3 col-md-6">
+                    <h5>Opportunities & Outreach</h5>
+                    <ul>
+                        <li><a asp-controller="Opportunities" asp-action="Index">PhD Fellowships</a></li>
+                        <li><a asp-controller="Opportunities" asp-action="Index">MS / MPhil Research</a></li>
+                        <li><a asp-controller="Opportunities" asp-action="Index">Internships</a></li>
+                        <li><a asp-controller="Events" asp-action="Index">Seminars & Workshops</a></li>
+                        <li><a asp-controller="Gallery" asp-action="Index">Fieldwork Gallery</a></li>
+                        <li><a asp-controller="Collaboration" asp-action="Index">Submit Research Inquiry</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact & Coordinates -->
+                <div class="col-lg-3 col-md-6">
+                    <h5>Contact Coordinates</h5>
+                    <p class="text-light small mb-2">
+                        <i class="bi bi-geo-alt me-2 text-info"></i> @config.Location
+                    </p>
+                    <p class="text-light small mb-2">
+                        <i class="bi bi-envelope me-2 text-info"></i> <a href="mailto:@config.ContactEmail" class="text-light">@config.ContactEmail</a>
+                    </p>
+                    <p class="text-light small mb-3">
+                        <i class="bi bi-telephone me-2 text-info"></i> @config.Phone
+                    </p>
+                    <div class="d-flex gap-2 mt-2">
+                        @if (!string.IsNullOrWhiteSpace(config.LinkedInUrl))
+                        {
+                            <a href="@config.LinkedInUrl" target="_blank" rel="noopener" class="btn btn-sm btn-outline-light rounded-circle"><i class="bi bi-linkedin"></i></a>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(config.TwitterUrl))
+                        {
+                            <a href="@config.TwitterUrl" target="_blank" rel="noopener" class="btn btn-sm btn-outline-light rounded-circle"><i class="bi bi-twitter-x"></i></a>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(config.GoogleScholarUrl))
+                        {
+                            <a href="@config.GoogleScholarUrl" target="_blank" rel="noopener" class="btn btn-sm btn-outline-light rounded-circle"><i class="bi bi-mortarboard"></i></a>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(config.GitHubUrl))
+                        {
+                            <a href="@config.GitHubUrl" target="_blank" rel="noopener" class="btn btn-sm btn-outline-light rounded-circle"><i class="bi bi-github"></i></a>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="hsrl-footer-bottom d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+                <div>
+                    &copy; @DateTime.UtcNow.Year @config.SiteName. All rights reserved. Associated with CEWRE, UET Lahore.
+                </div>
+                <div class="small">
+                    <span class="text-light-50 me-3"><i class="bi bi-check-circle-fill text-success me-1"></i> Content Integrity Verified</span>
+                    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="text-light text-decoration-none">Admin Area</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

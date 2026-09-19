@@ -1,0 +1,188 @@
+@model HSLR.Models.Entities.Project
+@{
+    ViewData["Title"] = $"{Model.Title} — Case Study";
+    var relatedPubs = ViewBag.RelatedPublications as List<HSLR.Models.Entities.Publication> ?? new();
+}
+
+<div class="hsrl-page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Projects" asp-action="Index">Projects</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Case Study</li>
+            </ol>
+        </nav>
+        <div class="d-flex flex-wrap gap-2 mb-2">
+            <span class="hsrl-badge @(Model.Status == HSLR.Models.Entities.ProjectStatus.Active ? "hsrl-badge-success" : "hsrl-badge-hydro")">
+                @Model.Status
+            </span>
+            <span class="badge bg-light text-dark border font-monospace">@Model.ProjectType</span>
+            <span class="badge bg-light text-dark border font-monospace">Year @Model.Year</span>
+        </div>
+        <h1 class="h2 fw-bold text-white mb-2">@Model.Title</h1>
+        <p class="text-white-50 lead mb-0">@(Model.Subtitle ?? Model.ShortTitle)</p>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="row g-5">
+        <!-- Main Column -->
+        <div class="col-lg-8">
+            <!-- Study Area & Location Highlight -->
+            <div class="card border rounded-4 shadow-sm p-4 mb-4 bg-light">
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                    <div>
+                        <span class="text-muted small font-monospace d-block text-uppercase">Geographic Target</span>
+                        <h5 class="fw-bold mb-0 text-navy"><i class="bi bi-geo-alt-fill text-danger me-1"></i> @Model.StudyArea, @Model.Country</h5>
+                    </div>
+                    <div class="d-flex flex-wrap gap-1">
+                        @foreach (var pra in Model.ProjectResearchAreas)
+                        {
+                            <span class="hsrl-badge hsrl-badge-hydro">@pra.ResearchDomain?.Title</span>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1. The Research Challenge -->
+            <div class="card border rounded-4 shadow-sm p-4 p-lg-5 mb-4 bg-white">
+                <h4 class="fw-bold text-navy mb-3"><i class="bi bi-exclamation-octagon-fill text-warning me-2"></i> The Problem & Scientific Challenge</h4>
+                <p class="text-secondary" style="line-height: 1.8; font-size: 1.05rem;">
+                    @Model.Challenge
+                </p>
+            </div>
+
+            <!-- 2. Research Objectives -->
+            @if (Model.Objectives.Any())
+            {
+                <div class="card border rounded-4 shadow-sm p-4 p-lg-5 mb-4 bg-white">
+                    <h4 class="fw-bold text-navy mb-3"><i class="bi bi-bullseye text-primary me-2"></i> Project Objectives</h4>
+                    <ul class="list-group list-group-flush">
+                        @foreach (var obj in Model.Objectives)
+                        {
+                            <li class="list-group-item px-0 py-2 d-flex gap-3 align-items-start border-0">
+                                <i class="bi bi-arrow-right-circle-fill text-info flex-shrink-0 mt-1"></i>
+                                <span class="text-secondary">@obj.Objective</span>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            <!-- 3. Methodology & Workflow Steps -->
+            @if (Model.MethodologySteps.Any())
+            {
+                <div class="card border rounded-4 shadow-sm p-4 p-lg-5 mb-4 bg-white">
+                    <h4 class="fw-bold text-navy mb-4"><i class="bi bi-diagram-3-fill text-primary me-2"></i> Analytical Methodology & Workflow</h4>
+                    <div class="vstack gap-3">
+                        @foreach (var step in Model.MethodologySteps)
+                        {
+                            <div class="p-3 bg-light rounded-3 border">
+                                <div class="d-flex align-items-center gap-2 mb-1">
+                                    <span class="badge bg-navy text-white font-monospace" style="background: var(--hsrl-navy);">Step 0@(step.DisplayOrder)</span>
+                                    <h6 class="fw-bold mb-0 text-navy">@step.StepTitle</h6>
+                                </div>
+                                <p class="small text-secondary mb-0" style="line-height: 1.7;">@step.StepDescription</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+            <!-- 4. Key Findings -->
+            @if (Model.KeyFindings.Any())
+            {
+                <div class="card border rounded-4 shadow-sm p-4 p-lg-5 mb-4 bg-white">
+                    <h4 class="fw-bold text-navy mb-3"><i class="bi bi-graph-up-arrow text-success me-2"></i> Key Scientific Findings & Outputs</h4>
+                    <div class="row g-3">
+                        @foreach (var finding in Model.KeyFindings)
+                        {
+                            <div class="col-12">
+                                <div class="p-3 rounded-3 bg-success-subtle border border-success-subtle d-flex gap-3 align-items-start">
+                                    <i class="bi bi-check-circle-fill text-success fs-5 flex-shrink-0 mt-1"></i>
+                                    <div class="text-dark small" style="line-height: 1.6;">@finding.Finding</div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+            <!-- 5. Real-World Impact -->
+            @if (!string.IsNullOrWhiteSpace(Model.Impact))
+            {
+                <div class="card border rounded-4 shadow-sm p-4 p-lg-5 mb-4 text-white" style="background: linear-gradient(135deg, var(--hsrl-navy-dark), var(--hsrl-navy));">
+                    <h4 class="fw-bold mb-3"><i class="bi bi-award-fill text-info me-2"></i> Societal & Policy Impact</h4>
+                    <p class="text-white-50 mb-0" style="line-height: 1.8;">
+                        @Model.Impact
+                    </p>
+                </div>
+            }
+
+            <!-- Related Publications -->
+            @if (relatedPubs.Any())
+            {
+                <div class="card border rounded-4 shadow-sm p-4 p-lg-5 bg-white">
+                    <h5 class="fw-bold text-navy mb-3"><i class="bi bi-journal-text text-primary me-2"></i> Associated Publications</h5>
+                    <div class="vstack gap-2">
+                        @foreach (var pub in relatedPubs)
+                        {
+                            <div class="p-2 border rounded-2 bg-light">
+                                <a href="@(pub.Url ?? "#")" target="_blank" rel="noopener" class="fw-semibold small text-navy text-decoration-none">
+                                    @pub.Title
+                                </a>
+                                <div class="small text-muted">@pub.Journal (@pub.Year) &bull; DOI: @pub.Doi</div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Sidebar Column -->
+        <div class="col-lg-4">
+            <!-- Satellite & In-Situ Data Sources -->
+            @if (Model.DataSources.Any())
+            {
+                <div class="card border rounded-4 shadow-sm p-4 mb-4 bg-white">
+                    <h5 class="fw-bold text-navy mb-3"><i class="bi bi-satellite text-info me-2"></i> Satellite & Data Sources</h5>
+                    <ul class="list-unstyled small mb-0">
+                        @foreach (var src in Model.DataSources)
+                        {
+                            <li class="mb-2 pb-2 border-bottom d-flex gap-2">
+                                <i class="bi bi-hdd-network text-primary"></i>
+                                <span>@src.SourceName</span>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            <!-- Technologies & Computational Tooling -->
+            @if (Model.Technologies.Any())
+            {
+                <div class="card border rounded-4 shadow-sm p-4 mb-4 bg-white">
+                    <h5 class="fw-bold text-navy mb-3"><i class="bi bi-code-slash text-primary me-2"></i> Technologies & Tools</h5>
+                    <div class="d-flex flex-wrap gap-1">
+                        @foreach (var tech in Model.Technologies)
+                        {
+                            <span class="badge bg-light text-dark border font-monospace p-2">@tech.TechnologyName</span>
+                        }
+                    </div>
+                </div>
+            }
+
+            <!-- Inquire About This Project -->
+            <div class="card border-0 rounded-4 shadow-sm p-4 text-white" style="background: linear-gradient(135deg, var(--hsrl-navy), var(--hsrl-navy-light));">
+                <h5 class="fw-bold mb-2">Interested in this Research?</h5>
+                <p class="small text-white-50 mb-3">
+                    Organizations or researchers interested in data access, code sharing, or expanding this study are invited to submit an inquiry.
+                </p>
+                <a asp-controller="Collaboration" asp-action="Index" class="btn btn-hsrl-hydro w-100">
+                    <i class="bi bi-send me-1"></i> Contact Project Leads
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

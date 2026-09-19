@@ -1,0 +1,169 @@
+@{
+    ViewData["Title"] = "Dashboard Overview";
+    var recentInquiries = ViewBag.RecentInquiries as List<HSLR.Models.Entities.CollaborationInquiry> ?? new();
+    var recentProjects = ViewBag.RecentProjects as List<HSLR.Models.Entities.Project> ?? new();
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="h3 fw-bold text-navy mb-1">Laboratory Management Dashboard</h2>
+        <p class="text-secondary small mb-0">Overview of active inquiries, research publications, and laboratory digital assets.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-area="Admin" asp-controller="Inquiries" asp-action="Index" class="btn btn-sm btn-hsrl-primary">
+            <i class="bi bi-inbox me-1"></i> Review Inquiries
+        </a>
+    </div>
+</div>
+
+<!-- Metrics Cards -->
+<div class="row g-3 mb-5">
+    <div class="col-sm-6 col-xl-3">
+        <div class="card border-0 rounded-4 shadow-sm p-4 bg-white">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="small text-muted font-monospace text-uppercase">New Inquiries</span>
+                <span class="hsrl-brand-icon" style="width: 32px; height: 32px; font-size: 0.9rem; background: rgba(239, 68, 68, 0.1); color: #ef4444;">
+                    <i class="bi bi-bell-fill"></i>
+                </span>
+            </div>
+            <h3 class="fw-bold mb-0 text-navy font-monospace">@ViewBag.NewInquiries</h3>
+            <small class="text-muted">Total: @ViewBag.TotalInquiries inquiries</small>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <div class="card border-0 rounded-4 shadow-sm p-4 bg-white">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="small text-muted font-monospace text-uppercase">Publications</span>
+                <span class="hsrl-brand-icon" style="width: 32px; height: 32px; font-size: 0.9rem; background: rgba(14, 165, 233, 0.1); color: #0284c7;">
+                    <i class="bi bi-journal-text"></i>
+                </span>
+            </div>
+            <h3 class="fw-bold mb-0 text-navy font-monospace">@ViewBag.TotalPublications</h3>
+            <small class="text-muted">Peer-reviewed manuscripts</small>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <div class="card border-0 rounded-4 shadow-sm p-4 bg-white">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="small text-muted font-monospace text-uppercase">Projects</span>
+                <span class="hsrl-brand-icon" style="width: 32px; height: 32px; font-size: 0.9rem; background: rgba(16, 185, 129, 0.1); color: #10b981;">
+                    <i class="bi bi-briefcase-fill"></i>
+                </span>
+            </div>
+            <h3 class="fw-bold mb-0 text-navy font-monospace">@ViewBag.TotalProjects</h3>
+            <small class="text-success font-monospace">@ViewBag.ActiveProjects Active Grants</small>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <div class="card border-0 rounded-4 shadow-sm p-4 bg-white">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="small text-muted font-monospace text-uppercase">Team Members</span>
+                <span class="hsrl-brand-icon" style="width: 32px; height: 32px; font-size: 0.9rem; background: rgba(139, 92, 246, 0.1); color: #8b5cf6;">
+                    <i class="bi bi-people-fill"></i>
+                </span>
+            </div>
+            <h3 class="fw-bold mb-0 text-navy font-monospace">@ViewBag.TotalPeople</h3>
+            <small class="text-muted">Director, fellows & scholars</small>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Inquiries & Projects Grid -->
+<div class="row g-4">
+    <!-- Recent Inquiries -->
+    <div class="col-lg-7">
+        <div class="card border-0 rounded-4 shadow-sm p-4 bg-white h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+                <h5 class="fw-bold text-navy mb-0"><i class="bi bi-inbox-fill text-primary me-2"></i> Recent Inquiries</h5>
+                <a asp-area="Admin" asp-controller="Inquiries" asp-action="Index" class="small text-decoration-none">View All</a>
+            </div>
+
+            @if (!recentInquiries.Any())
+            {
+                <p class="text-muted small my-3">No incoming inquiries logged yet.</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle small">
+                        <thead>
+                            <tr class="text-muted font-monospace">
+                                <th>Ref</th>
+                                <th>Submitter</th>
+                                <th>Collaboration</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var inq in recentInquiries)
+                            {
+                                <tr>
+                                    <td class="font-monospace fw-bold text-primary">#@inq.Id</td>
+                                    <td>
+                                        <div class="fw-bold text-navy">@inq.FullName</div>
+                                        <small class="text-muted">@inq.Organization</small>
+                                    </td>
+                                    <td><span class="badge bg-light text-dark border">@inq.CollaborationType</span></td>
+                                    <td>
+                                        <span class="badge @(inq.Status == HSLR.Models.Entities.InquiryStatus.New ? "bg-danger" : "bg-success") font-monospace">
+                                            @inq.Status
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a asp-area="Admin" asp-controller="Inquiries" asp-action="Details" asp-route-id="@inq.Id" class="btn btn-sm btn-outline-primary py-0 px-2">
+                                            View
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Quick Shortcuts & Recent Projects -->
+    <div class="col-lg-5">
+        <div class="card border-0 rounded-4 shadow-sm p-4 bg-white h-100">
+            <h5 class="fw-bold text-navy mb-3 border-bottom pb-2"><i class="bi bi-lightning-charge-fill text-warning me-2"></i> Quick Actions</h5>
+            <div class="row g-2 mb-4">
+                <div class="col-6">
+                    <a asp-area="Admin" asp-controller="Publications" asp-action="Create" class="btn btn-light border w-100 text-start small p-2">
+                        <i class="bi bi-plus-circle text-primary me-1"></i> Add Publication
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a asp-area="Admin" asp-controller="Projects" asp-action="Create" class="btn btn-light border w-100 text-start small p-2">
+                        <i class="bi bi-plus-circle text-primary me-1"></i> Add Project
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a asp-area="Admin" asp-controller="People" asp-action="Create" class="btn btn-light border w-100 text-start small p-2">
+                        <i class="bi bi-plus-circle text-primary me-1"></i> Add Team Member
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a asp-area="Admin" asp-controller="Events" asp-action="Create" class="btn btn-light border w-100 text-start small p-2">
+                        <i class="bi bi-plus-circle text-primary me-1"></i> Add Event
+                    </a>
+                </div>
+            </div>
+
+            <h6 class="fw-bold text-navy mb-2 font-monospace text-uppercase small">Research Projects Overview</h6>
+            <div class="vstack gap-2">
+                @foreach (var proj in recentProjects)
+                {
+                    <div class="p-2 rounded-2 bg-light border small d-flex justify-content-between align-items-center">
+                        <span class="text-navy fw-semibold text-truncate me-2" style="max-width: 260px;">@proj.Title</span>
+                        <span class="badge bg-secondary-subtle text-secondary font-monospace" style="font-size: 0.65rem;">@proj.Status</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

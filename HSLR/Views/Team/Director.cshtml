@@ -1,0 +1,167 @@
+@model HSLR.Models.Entities.Person
+@{
+    ViewData["Title"] = $"{Model.Name} — Lab Director Profile";
+    var publications = ViewBag.Publications as List<HSLR.Models.Entities.Publication> ?? new();
+    var projects = ViewBag.Projects as List<HSLR.Models.Entities.Project> ?? new();
+}
+
+<div class="hsrl-page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Team" asp-action="Index">Team</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Director Profile</li>
+            </ol>
+        </nav>
+        <div class="row align-items-center g-4">
+            <div class="col-md-auto">
+                <div class="hsrl-avatar hsrl-avatar-lg" style="width: 120px; height: 120px; font-size: 2.2rem; border: 3px solid rgba(255,255,255,0.3);">
+                    @Model.Initials
+                </div>
+            </div>
+            <div class="col-md">
+                <span class="badge bg-info text-dark font-monospace mb-2">@Model.Role</span>
+                <h1 class="h2 mb-1">@Model.Name</h1>
+                <p class="text-white-50 mb-2">@Model.CurrentAffiliation</p>
+                <div class="d-flex flex-wrap gap-2">
+                    @if (!string.IsNullOrWhiteSpace(Model.GoogleScholarUrl))
+                    {
+                        <a href="@Model.GoogleScholarUrl" target="_blank" rel="noopener" class="btn btn-sm btn-outline-light"><i class="bi bi-mortarboard-fill me-1"></i> Google Scholar</a>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.ResearchGateUrl))
+                    {
+                        <a href="@Model.ResearchGateUrl" target="_blank" rel="noopener" class="btn btn-sm btn-outline-light"><i class="bi bi-journal-check me-1"></i> ResearchGate</a>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.LinkedInUrl))
+                    {
+                        <a href="@Model.LinkedInUrl" target="_blank" rel="noopener" class="btn btn-sm btn-outline-light"><i class="bi bi-linkedin me-1"></i> LinkedIn</a>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.OrcidUrl))
+                    {
+                        <a href="@Model.OrcidUrl" target="_blank" rel="noopener" class="btn btn-sm btn-outline-light"><i class="bi bi-person-lines-fill me-1"></i> ORCID</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="row g-5">
+        <!-- Main Column -->
+        <div class="col-lg-8">
+            <!-- Biography -->
+            <div class="card border rounded-4 shadow-sm p-4 p-lg-5 mb-4">
+                <h4 class="fw-bold text-navy mb-3"><i class="bi bi-person-badge-fill me-2 text-primary"></i> Academic Biography</h4>
+                <div class="text-secondary" style="line-height: 1.8; white-space: pre-line;">
+                    @(Model.Biography ?? Model.ShortBio)
+                </div>
+            </div>
+
+            <!-- Representative Publications -->
+            <div class="card border rounded-4 shadow-sm p-4 p-lg-5 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="fw-bold text-navy mb-0"><i class="bi bi-journal-text me-2 text-primary"></i> Selected Publications</h4>
+                    <a asp-controller="Publications" asp-action="Index" class="btn btn-sm btn-hsrl-outline">View All</a>
+                </div>
+
+                <div class="vstack gap-3">
+                    @foreach (var pub in publications.Take(5))
+                    {
+                        <div class="p-3 bg-light rounded-3 border">
+                            <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+                                <span class="badge bg-navy text-white font-monospace small" style="background: var(--hsrl-navy);">@pub.PublicationType</span>
+                                <span class="small text-muted font-monospace">@pub.Year</span>
+                            </div>
+                            <h6 class="fw-bold mb-1">
+                                <a href="@(pub.Url ?? "#")" target="_blank" rel="noopener" class="text-decoration-none text-navy">
+                                    @pub.Title
+                                </a>
+                            </h6>
+                            <p class="small text-muted mb-1">
+                                <i class="bi bi-book me-1"></i> @pub.Journal &bull; @string.Join(", ", pub.Authors.Select(a => a.AuthorName))
+                            </p>
+                            @if (!string.IsNullOrWhiteSpace(pub.Doi))
+                            {
+                                <a href="https://doi.org/@pub.Doi" target="_blank" rel="noopener" class="small font-monospace text-primary text-decoration-none">
+                                    <i class="bi bi-link-45deg"></i> DOI: @pub.Doi
+                                </a>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Supervised Research Projects -->
+            <div class="card border rounded-4 shadow-sm p-4 p-lg-5">
+                <h4 class="fw-bold text-navy mb-4"><i class="bi bi-diagram-3-fill me-2 text-primary"></i> Research Initiatives & Grants</h4>
+                <div class="row g-3">
+                    @foreach (var proj in projects.Take(3))
+                    {
+                        <div class="col-12">
+                            <div class="p-3 border rounded-3 bg-white">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="badge bg-success-subtle text-success font-monospace">@proj.Status</span>
+                                    <span class="small text-muted font-monospace">@proj.Year</span>
+                                </div>
+                                <h6 class="fw-bold mb-1">
+                                    <a asp-controller="Projects" asp-action="Details" asp-route-slug="@proj.Slug" class="text-decoration-none text-navy">
+                                        @proj.Title
+                                    </a>
+                                </h6>
+                                <p class="small text-muted mb-0">@proj.StudyArea</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Column -->
+        <div class="col-lg-4">
+            <!-- Research Focus Areas -->
+            <div class="card border rounded-4 shadow-sm p-4 mb-4">
+                <h5 class="fw-bold text-navy mb-3"><i class="bi bi-tags-fill me-2 text-info"></i> Research Expertise</h5>
+                <div class="d-flex flex-wrap gap-2">
+                    @foreach (var interest in Model.ResearchInterests)
+                    {
+                        <span class="hsrl-badge hsrl-badge-hydro">@interest.Interest</span>
+                    }
+                </div>
+            </div>
+
+            <!-- Affiliation & Lab Office -->
+            <div class="card border rounded-4 shadow-sm p-4 mb-4 bg-light">
+                <h5 class="fw-bold text-navy mb-3"><i class="bi bi-building me-2 text-primary"></i> Lab & Institutional Affiliation</h5>
+                <p class="small text-secondary mb-2">
+                    <strong>Department:</strong><br />
+                    Centre of Excellence in Water Resources Engineering (CEWRE)
+                </p>
+                <p class="small text-secondary mb-2">
+                    <strong>University:</strong><br />
+                    University of Engineering and Technology (UET) Lahore
+                </p>
+                <p class="small text-secondary mb-3">
+                    <strong>Address:</strong><br />
+                    Grand Trunk (GT) Road, Lahore 54890, Punjab, Pakistan
+                </p>
+                <hr />
+                <a asp-controller="Collaboration" asp-action="Index" class="btn btn-hsrl-primary w-100">
+                    <i class="bi bi-envelope me-1"></i> Inquire for Supervision
+                </a>
+            </div>
+
+            <!-- Supervision & Opportunities Notice -->
+            <div class="card border-0 rounded-4 shadow-sm p-4 text-white" style="background: linear-gradient(135deg, var(--hsrl-navy-dark), var(--hsrl-navy));">
+                <h6 class="fw-bold mb-2"><i class="bi bi-mortarboard-fill me-1 text-info"></i> Prospective Students</h6>
+                <p class="small text-white-50 mb-3">
+                    Prof. Dr. Muhammad Waseem accepts motivated PhD scholars, MS research fellows, and postdocs with quantitative backgrounds in remote sensing, hydrology, or computer science.
+                </p>
+                <a asp-controller="Opportunities" asp-action="Index" class="btn btn-sm btn-outline-light">
+                    View Open Research Calls
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

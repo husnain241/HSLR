@@ -1,0 +1,21 @@
+@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<div class="card border-0 rounded-4 shadow-sm p-5 text-center bg-white my-5 max-w-600 mx-auto">
+    <div class="hsrl-brand-icon mx-auto mb-3" style="background: rgba(239, 68, 68, 0.1); color: #dc2626; width: 64px; height: 64px; font-size: 2rem;">
+        <i class="bi bi-shield-x"></i>
+    </div>
+    <h3 class="fw-bold text-navy mb-2">Access Denied</h3>
+    <p class="text-muted mb-4">
+        You do not have the required administrative permissions to access this section of the HSRL portal.
+    </p>
+    <div>
+        <a asp-area="Admin" asp-controller="Account" asp-action="Login" class="btn btn-hsrl-primary me-2">
+            Switch Account
+        </a>
+        <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+            Public Website
+        </a>
+    </div>
+</div>

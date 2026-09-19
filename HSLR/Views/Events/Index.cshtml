@@ -1,0 +1,129 @@
+@{
+    ViewData["Title"] = "Events, Seminars & Fieldwork";
+    var upcoming = ViewBag.UpcomingEvents as List<HSLR.Models.Entities.Event> ?? new();
+    var past = ViewBag.PastEvents as List<HSLR.Models.Entities.Event> ?? new();
+}
+
+<div class="hsrl-page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Events</li>
+            </ol>
+        </nav>
+        <h1>Seminars, Workshops & Fieldwork</h1>
+        <p>
+            Academic seminars, technical training workshops, glacio-hydrological fieldwork expeditions, and international webinars hosted by HSRL.
+        </p>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <!-- Upcoming Events Section -->
+    <div class="mb-5">
+        <div class="section-header">
+            <span class="section-eyebrow"><i class="bi bi-calendar-check"></i> Forthcoming</span>
+            <h2 class="section-title">Upcoming Seminars & Workshops</h2>
+            <p class="section-lead">Mark your calendar for upcoming research presentations and capacity-building opportunities.</p>
+        </div>
+
+        @if (!upcoming.Any())
+        {
+            <div class="p-4 bg-white rounded-4 border text-center text-muted">
+                No upcoming events currently scheduled. Check back soon or propose a seminar topic through our collaboration form.
+            </div>
+        }
+        else
+        {
+            <div class="row g-4">
+                @foreach (var ev in upcoming)
+                {
+                    <div class="col-lg-6">
+                        <div class="hsrl-card p-4">
+                            <div class="d-flex gap-3 align-items-start mb-3">
+                                <div class="text-center p-3 rounded-3 bg-light border" style="min-width: 85px;">
+                                    <span class="d-block text-danger fw-bold font-monospace">@ev.EventDate.ToString("MMM").ToUpper()</span>
+                                    <span class="d-block fs-2 fw-bold text-navy font-monospace">@ev.EventDate.ToString("dd")</span>
+                                    <span class="d-block small text-muted font-monospace">@ev.EventDate.ToString("yyyy")</span>
+                                </div>
+                                <div>
+                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                        <span class="badge bg-primary text-white font-monospace">@ev.EventType</span>
+                                        @if (ev.Featured)
+                                        {
+                                            <span class="badge bg-warning text-dark font-monospace">Featured</span>
+                                        }
+                                    </div>
+                                    <h4 class="h5 fw-bold mb-1 text-navy">@ev.Title</h4>
+                                    <div class="small text-muted">
+                                        <i class="bi bi-clock me-1"></i> @ev.EventDate.ToString("HH:mm") UTC
+                                        @if (ev.EndDate.HasValue)
+                                        {
+                                            <span> &ndash; @ev.EndDate.Value.ToString("HH:mm") UTC</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p class="small text-secondary mb-3">@ev.Description</p>
+
+                            <div class="p-3 bg-light rounded-3 border small mb-3">
+                                <div class="mb-1"><i class="bi bi-geo-alt-fill text-danger me-1"></i> <strong>Location:</strong> @ev.Location</div>
+                                @if (!string.IsNullOrWhiteSpace(ev.Speaker))
+                                {
+                                    <div class="mb-1"><i class="bi bi-person-fill text-primary me-1"></i> <strong>Speaker:</strong> @ev.Speaker</div>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(ev.Affiliation))
+                                {
+                                    <div><i class="bi bi-building text-secondary me-1"></i> <strong>Affiliation:</strong> @ev.Affiliation</div>
+                                }
+                            </div>
+
+                            <div class="mt-auto d-flex justify-content-end">
+                                <a asp-controller="Collaboration" asp-action="Index" class="btn btn-sm btn-hsrl-primary">
+                                    <i class="bi bi-envelope-check me-1"></i> Register / Inquire Attendance
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+    <!-- Past Events Archive -->
+    <div>
+        <div class="section-header">
+            <span class="section-eyebrow"><i class="bi bi-archive"></i> Retrospective</span>
+            <h2 class="section-title">Past Events & Fieldwork Archive</h2>
+            <p class="section-lead">Archive of concluded technical sessions, field measurement campaigns, and international webinars.</p>
+        </div>
+
+        <div class="vstack gap-3">
+            @foreach (var ev in past)
+            {
+                <div class="card border rounded-4 shadow-sm p-4 bg-white">
+                    <div class="row align-items-center g-3">
+                        <div class="col-md-2 text-md-center border-end">
+                            <span class="badge bg-secondary text-white font-monospace mb-1">@ev.EventType</span>
+                            <div class="font-monospace text-muted small">@ev.EventDate.ToString("yyyy-MM-dd")</div>
+                        </div>
+                        <div class="col-md-7">
+                            <h5 class="fw-bold mb-1 text-navy">@ev.Title</h5>
+                            <div class="small text-muted mb-2"><i class="bi bi-geo-alt me-1 text-danger"></i> @ev.Location</div>
+                            <p class="small text-secondary mb-0">@ev.Description</p>
+                        </div>
+                        <div class="col-md-3 text-md-end">
+                            @if (!string.IsNullOrWhiteSpace(ev.Speaker))
+                            {
+                                <span class="d-block small text-muted">Speaker: <strong>@ev.Speaker</strong></span>
+                            }
+                            <span class="badge bg-light text-muted border font-monospace mt-2">Concluded</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,244 @@
+@model HSLR.Models.ViewModels.PublicationsIndexViewModel
+@{
+    ViewData["Title"] = "Publications Archive";
+}
+
+<div class="hsrl-page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Publications</li>
+            </ol>
+        </nav>
+        <h1>Peer-Reviewed Publications</h1>
+        <p>
+            Explore our archival journal articles, international conference proceedings, and technical reports on satellite remote sensing, Indus Basin hydrology, and hydroclimatic AI.
+        </p>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <!-- Search & Filter Card -->
+    <div class="card border rounded-4 shadow-sm p-4 mb-4 bg-white">
+        <form method="get" asp-action="Index" class="row g-3 align-items-end">
+            <!-- Text Search -->
+            <div class="col-lg-4 col-md-6">
+                <label class="form-label small fw-bold text-navy font-monospace">Search Keywords</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light"><i class="bi bi-search"></i></span>
+                    <input type="text" name="search" value="@Model.Search" class="form-control" placeholder="Search title, author, journal, abstract..." />
+                </div>
+            </div>
+
+            <!-- Year Filter -->
+            <div class="col-lg-2 col-md-3 col-6">
+                <label class="form-label small fw-bold text-navy font-monospace">Year</label>
+                <select name="year" class="form-select">
+                    <option value="">All Years</option>
+                    @foreach (var y in Model.AvailableYears)
+                    {
+                        <option value="@y" selected="@(Model.Year == y ? "selected" : null)">@y</option>
+                    }
+                </select>
+            </div>
+
+            <!-- Publication Type Filter -->
+            <div class="col-lg-3 col-md-3 col-6">
+                <label class="form-label small fw-bold text-navy font-monospace">Publication Type</label>
+                <select name="type" class="form-select">
+                    <option value="">All Types</option>
+                    @foreach (var t in Enum.GetValues<HSLR.Models.Entities.PublicationType>())
+                    {
+                        <option value="@((int)t)" selected="@(Model.Type == t ? "selected" : null)">@t</option>
+                    }
+                </select>
+            </div>
+
+            <!-- Research Domain Filter -->
+            <div class="col-lg-3 col-md-6">
+                <label class="form-label small fw-bold text-navy font-monospace">Research Domain</label>
+                <select name="domainId" class="form-select">
+                    <option value="">All Domains</option>
+                    @foreach (var d in Model.AvailableDomains)
+                    {
+                        <option value="@d.Id" selected="@(Model.DomainId == d.Id ? "selected" : null)">@d.Title</option>
+                    }
+                </select>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="col-12 d-flex gap-2 justify-content-end pt-2 border-top">
+                <button type="submit" class="btn btn-hsrl-primary">
+                    <i class="bi bi-funnel-fill me-1"></i> Apply Filters
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-x-circle me-1"></i> Reset
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Showing Record Counts -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="small text-muted font-monospace">
+            @if (Model.TotalItems > 0)
+            {
+                <span>Showing <strong>@Model.FirstItemIndex</strong> to <strong>@Model.LastItemIndex</strong> of <strong>@Model.TotalItems</strong> records</span>
+            }
+            else
+            {
+                <span>No matching publications found.</span>
+            }
+        </div>
+        <div class="small text-muted font-monospace">
+            Page @Model.Page of @Math.Max(1, Model.TotalPages)
+        </div>
+    </div>
+
+    <!-- Publications List -->
+    @if (!Model.Publications.Any())
+    {
+        <div class="text-center py-5 bg-white rounded-4 border">
+            <i class="bi bi-journal-x fs-1 text-muted"></i>
+            <h5 class="fw-bold mt-3 text-navy">No Publications Matched</h5>
+            <p class="text-muted small">Try broadening your search keywords or resetting active filters.</p>
+            <a asp-action="Index" class="btn btn-sm btn-hsrl-primary">Reset All Filters</a>
+        </div>
+    }
+    else
+    {
+        <div class="vstack gap-3 mb-4">
+            @foreach (var pub in Model.Publications)
+            {
+                <div class="card border rounded-4 shadow-sm p-4 bg-white">
+                    <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-2">
+                        <div class="d-flex flex-wrap align-items-center gap-2">
+                            <span class="hsrl-badge hsrl-badge-navy">@pub.PublicationType</span>
+                            @if (!string.IsNullOrWhiteSpace(pub.Journal))
+                            {
+                                <span class="fw-semibold text-primary small">@pub.Journal</span>
+                            }
+                            @if (pub.Featured)
+                            {
+                                <span class="badge bg-warning text-dark font-monospace" style="font-size: 0.65rem;">Featured</span>
+                            }
+                        </div>
+                        <span class="meta-chip"><i class="bi bi-calendar3"></i> @pub.Year</span>
+                    </div>
+
+                    <h5 class="fw-bold mb-2">
+                        @if (!string.IsNullOrWhiteSpace(pub.Url))
+                        {
+                            <a href="@pub.Url" target="_blank" rel="noopener" class="text-decoration-none text-navy">
+                                @pub.Title <i class="bi bi-box-arrow-up-right small text-muted ms-1" style="font-size: 0.8rem;"></i>
+                            </a>
+                        }
+                        else
+                        {
+                            <span class="text-navy">@pub.Title</span>
+                        }
+                    </h5>
+
+                    <!-- Authors -->
+                    <p class="small text-muted mb-2">
+                        <i class="bi bi-people me-1"></i>
+                        @foreach (var author in pub.Authors)
+                        {
+                            if (author.IsLabMember)
+                            {
+                                <strong class="text-dark">@author.AuthorName</strong>@(author != pub.Authors.Last() ? ", " : "")
+                            }
+                            else
+                            {
+                                <span>@author.AuthorName</span>@(author != pub.Authors.Last() ? ", " : "")
+                            }
+                        }
+                    </p>
+
+                    <!-- Abstract Collapsible -->
+                    @if (!string.IsNullOrWhiteSpace(pub.Abstract))
+                    {
+                        <div class="my-2">
+                            <button class="btn btn-sm btn-link text-decoration-none p-0 text-muted small" type="button" data-bs-toggle="collapse" data-bs-target="#abstract-@pub.Id" aria-expanded="false">
+                                <i class="bi bi-file-text me-1"></i> View Abstract <i class="bi bi-chevron-down small ms-1"></i>
+                            </button>
+                            <div class="collapse mt-2" id="abstract-@pub.Id">
+                                <div class="p-3 bg-light rounded-3 border small text-secondary" style="line-height: 1.7;">
+                                    @pub.Abstract
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Metadata footer & Domains -->
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pt-3 border-top mt-2">
+                        <div class="d-flex flex-wrap align-items-center gap-3">
+                            @if (!string.IsNullOrWhiteSpace(pub.Doi))
+                            {
+                                <a href="https://doi.org/@pub.Doi" target="_blank" rel="noopener" class="small text-decoration-none text-muted font-monospace">
+                                    <i class="bi bi-link-45deg text-info"></i> DOI: @pub.Doi
+                                </a>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(pub.CitationMetrics))
+                            {
+                                <span class="badge bg-light text-secondary border font-monospace">@pub.CitationMetrics</span>
+                            }
+                        </div>
+
+                        <div class="d-flex flex-wrap gap-1">
+                            @foreach (var domainArea in pub.PublicationResearchAreas)
+                            {
+                                <span class="hsrl-badge hsrl-badge-hydro">@domainArea.ResearchDomain?.Title</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Pagination -->
+        @if (Model.TotalPages > 1)
+        {
+            <nav aria-label="Publications pagination" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item @(!Model.HasPreviousPage ? "disabled" : "")">
+                        <a class="page-link" asp-action="Index"
+                           asp-route-page="@(Model.Page - 1)"
+                           asp-route-search="@Model.Search"
+                           asp-route-year="@Model.Year"
+                           asp-route-type="@((int?)Model.Type)"
+                           asp-route-domainId="@Model.DomainId">
+                            <i class="bi bi-chevron-left"></i> Previous
+                        </a>
+                    </li>
+
+                    @for (int i = 1; i <= Model.TotalPages; i++)
+                    {
+                        <li class="page-item @(Model.Page == i ? "active" : "")">
+                            <a class="page-link" asp-action="Index"
+                               asp-route-page="@i"
+                               asp-route-search="@Model.Search"
+                               asp-route-year="@Model.Year"
+                               asp-route-type="@((int?)Model.Type)"
+                               asp-route-domainId="@Model.DomainId">
+                                @i
+                            </a>
+                        </li>
+                    }
+
+                    <li class="page-item @(!Model.HasNextPage ? "disabled" : "")">
+                        <a class="page-link" asp-action="Index"
+                           asp-route-page="@(Model.Page + 1)"
+                           asp-route-search="@Model.Search"
+                           asp-route-year="@Model.Year"
+                           asp-route-type="@((int?)Model.Type)"
+                           asp-route-domainId="@Model.DomainId">
+                            Next <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        }
+    }
+</div>

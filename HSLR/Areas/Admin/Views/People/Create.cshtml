@@ -1,0 +1,123 @@
+@model HSLR.Models.Entities.Person
+@{
+    ViewData["Title"] = "Add Team Member";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb small font-monospace mb-1">
+                <li class="breadcrumb-item"><a asp-action="Index">People</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Create</li>
+            </ol>
+        </nav>
+        <h2 class="h3 fw-bold text-navy mb-0">Add Team Member</h2>
+    </div>
+</div>
+
+<div class="card border-0 rounded-4 shadow-sm p-4 bg-white">
+    <form asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small mb-3"></div>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label asp-for="Name" class="form-label small fw-bold font-monospace">Full Name (with title)</label>
+                <input asp-for="Name" class="form-control" placeholder="Prof. Dr. Full Name" />
+                <span asp-validation-for="Name" class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="DisplayName" class="form-label small fw-bold font-monospace">Display Name (Short)</label>
+                <input asp-for="DisplayName" class="form-control" placeholder="Dr. Full Name" />
+                <span asp-validation-for="DisplayName" class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="Slug" class="form-label small fw-bold font-monospace">Slug (URL friendly)</label>
+                <input asp-for="Slug" class="form-control" placeholder="e.g. dr-full-name" />
+                <span asp-validation-for="Slug" class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="Initials" class="form-label small fw-bold font-monospace">Initials (2-4 chars)</label>
+                <input asp-for="Initials" class="form-control" placeholder="MWB" />
+                <span asp-validation-for="Initials" class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="Role" class="form-label small fw-bold font-monospace">Role / Position</label>
+                <input asp-for="Role" class="form-control" placeholder="Postdoctoral Fellow / PhD Scholar" />
+                <span asp-validation-for="Role" class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="Category" class="form-label small fw-bold font-monospace">Category</label>
+                <select asp-for="Category" class="form-select" asp-items="Html.GetEnumSelectList<HSLR.Models.Entities.PersonCategory>()"></select>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="Status" class="form-label small fw-bold font-monospace">Status</label>
+                <select asp-for="Status" class="form-select" asp-items="Html.GetEnumSelectList<HSLR.Models.Entities.PersonStatus>()"></select>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="DisplayOrder" class="form-label small fw-bold font-monospace">Display Order</label>
+                <input asp-for="DisplayOrder" type="number" class="form-control" />
+            </div>
+
+            <div class="col-12">
+                <label asp-for="CurrentAffiliation" class="form-label small fw-bold font-monospace">Current Institutional Affiliation</label>
+                <input asp-for="CurrentAffiliation" class="form-control" placeholder="CEWRE, UET Lahore" />
+            </div>
+
+            <div class="col-12">
+                <label asp-for="ShortBio" class="form-label small fw-bold font-monospace">Short Bio (1-2 sentences)</label>
+                <textarea asp-for="ShortBio" rows="2" class="form-control"></textarea>
+                <span asp-validation-for="ShortBio" class="text-danger small"></span>
+            </div>
+
+            <div class="col-12">
+                <label asp-for="Biography" class="form-label small fw-bold font-monospace">Detailed Academic Biography (Optional)</label>
+                <textarea asp-for="Biography" rows="5" class="form-control"></textarea>
+            </div>
+
+            <div class="col-12">
+                <label class="form-label small fw-bold font-monospace">Research Interests (Comma-separated)</label>
+                <input type="text" name="interestsList" class="form-control" placeholder="Satellite Hydrology, Deep Learning, Flood Modeling" />
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="GoogleScholarUrl" class="form-label small fw-bold font-monospace">Google Scholar URL</label>
+                <input asp-for="GoogleScholarUrl" class="form-control" />
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="ResearchGateUrl" class="form-label small fw-bold font-monospace">ResearchGate URL</label>
+                <input asp-for="ResearchGateUrl" class="form-control" />
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="LinkedInUrl" class="form-label small fw-bold font-monospace">LinkedIn URL</label>
+                <input asp-for="LinkedInUrl" class="form-control" />
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="OrcidUrl" class="form-label small fw-bold font-monospace">ORCID URL</label>
+                <input asp-for="OrcidUrl" class="form-control" />
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-check mt-4">
+                    <input asp-for="Featured" class="form-check-input" />
+                    <label asp-for="Featured" class="form-check-label small text-secondary">Feature on Home Page</label>
+                </div>
+            </div>
+
+            <div class="col-12 pt-3 border-top d-flex gap-2">
+                <button type="submit" class="btn btn-hsrl-primary">Save Member</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>

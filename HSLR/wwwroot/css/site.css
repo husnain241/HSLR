@@ -1,0 +1,558 @@
+/* ==========================================================================
+   HSRL - Hydroclimatic Sensing Research Lab Design System
+   Primary: Deep Ocean/Navy | Accent: Hydro Cyan/Teal | Secondary: Slate
+   Typography: Clean Academic Sans + Monospace for Data/Tags
+   ========================================================================== */
+
+:root {
+  /* Brand Color Tokens */
+  --hsrl-navy-dark: #081a2e;
+  --hsrl-navy: #0a2540;
+  --hsrl-navy-light: #123258;
+  --hsrl-hydro: #0ea5e9;
+  --hsrl-hydro-dark: #0284c7;   
+  --hsrl-hydro-light: #38bdf8;
+  --hsrl-teal: #0d9488;
+  --hsrl-emerald: #10b981;
+  --hsrl-amber: #f59e0b;
+  --hsrl-rose: #f43f5e;
+
+  /* Neutrals & Surfaces */
+  --hsrl-surface-bg: #f8fafc;
+  --hsrl-surface-card: #ffffff;
+  --hsrl-surface-subtle: #f1f5f9;
+  --hsrl-border: #e2e8f0;
+  --hsrl-border-dark: #cbd5e1;
+  --hsrl-text-primary: #0f172a;
+  --hsrl-text-secondary: #475569;
+  --hsrl-text-muted: #64748b;
+  --hsrl-text-light: #94a3b8;
+
+  /* Typography */
+  --hsrl-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --hsrl-font-mono: 'SFMono-Regular', Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  /* Elevation & Shadows */
+  --hsrl-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --hsrl-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+  --hsrl-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.03);
+  --hsrl-shadow-hover: 0 12px 24px -4px rgba(10, 37, 64, 0.12);
+
+  /* Radius */
+  --hsrl-radius-sm: 4px;
+  --hsrl-radius-md: 8px;
+  --hsrl-radius-lg: 12px;
+  --hsrl-radius-pill: 9999px;
+}
+
+body {
+  font-family: var(--hsrl-font-sans);
+  color: var(--hsrl-text-primary);
+  background-color: var(--hsrl-surface-bg);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   Header & Navigation
+   ========================================================================== */
+.hsrl-topbar {
+  background-color: var(--hsrl-navy-dark);
+  font-size: 0.8125rem;
+  color: var(--hsrl-text-light);
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.hsrl-topbar a {
+  color: var(--hsrl-text-light);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.hsrl-topbar a:hover {
+  color: #ffffff;
+}
+
+.hsrl-navbar {
+  background-color: #ffffff;
+  box-shadow: var(--hsrl-shadow-sm);
+  border-bottom: 1px solid var(--hsrl-border);
+  padding: 0.75rem 0;
+}
+
+.hsrl-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--hsrl-navy);
+}
+
+.hsrl-brand-icon {
+  width: 42px;
+  height: 42px;
+  background: linear-gradient(135deg, var(--hsrl-navy), var(--hsrl-hydro-dark));
+  color: #ffffff;
+  border-radius: var(--hsrl-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  box-shadow: 0 2px 4px rgba(10, 37, 64, 0.2);
+}
+
+.hsrl-brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.hsrl-brand-title {
+  font-weight: 800;
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--hsrl-navy);
+}
+
+.hsrl-brand-sub {
+  font-size: 0.725rem;
+  color: var(--hsrl-text-muted);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.navbar-nav .nav-link {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--hsrl-text-secondary);
+  padding: 0.5rem 0.85rem !important;
+  border-radius: var(--hsrl-radius-sm);
+  transition: all 0.15s ease;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+  color: var(--hsrl-navy);
+  background-color: rgba(14, 165, 233, 0.08);
+}
+
+.nav-cta-btn {
+  background: var(--hsrl-navy);
+  color: #ffffff !important;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.5rem 1.1rem !important;
+  border-radius: var(--hsrl-radius-md);
+  box-shadow: var(--hsrl-shadow-sm);
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.nav-cta-btn:hover {
+  background: var(--hsrl-navy-light);
+  color: #ffffff !important;
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   Section Header Pattern
+   ========================================================================== */
+.section-header {
+  margin-bottom: 2.5rem;
+}
+
+.section-header.text-center {
+  max-width: 750px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--hsrl-font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--hsrl-hydro-dark);
+  background: rgba(14, 165, 233, 0.1);
+  padding: 4px 10px;
+  border-radius: var(--hsrl-radius-pill);
+  margin-bottom: 0.75rem;
+}
+
+.section-title {
+  font-size: 2.15rem;
+  font-weight: 800;
+  color: var(--hsrl-navy);
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  margin-bottom: 0.75rem;
+}
+
+.section-lead {
+  font-size: 1.05rem;
+  color: var(--hsrl-text-secondary);
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   Academic & Scientific Cards
+   ========================================================================== */
+.hsrl-card {
+  background: var(--hsrl-surface-card);
+  border: 1px solid var(--hsrl-border);
+  border-radius: var(--hsrl-radius-lg);
+  box-shadow: var(--hsrl-shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.hsrl-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--hsrl-shadow-hover);
+  border-color: rgba(14, 165, 233, 0.4);
+}
+
+.hsrl-card-body {
+  padding: 1.5rem;
+  flex: 1 1 auto;
+}
+
+.hsrl-card-footer {
+  padding: 1rem 1.5rem;
+  background-color: var(--hsrl-surface-subtle);
+  border-top: 1px solid var(--hsrl-border);
+  font-size: 0.85rem;
+}
+
+/* ==========================================================================
+   Badges, Chips & Metadata Tags
+   ========================================================================== */
+.hsrl-badge {
+  font-family: var(--hsrl-font-mono);
+  font-size: 0.725rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--hsrl-radius-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.hsrl-badge-hydro {
+  background-color: rgba(14, 165, 233, 0.12);
+  color: var(--hsrl-hydro-dark);
+  border: 1px solid rgba(14, 165, 233, 0.25);
+}
+
+.hsrl-badge-navy {
+  background-color: rgba(10, 37, 64, 0.08);
+  color: var(--hsrl-navy);
+  border: 1px solid rgba(10, 37, 64, 0.15);
+}
+
+.hsrl-badge-success {
+  background-color: rgba(16, 185, 129, 0.12);
+  color: #047857;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.hsrl-badge-amber {
+  background-color: rgba(245, 158, 11, 0.12);
+  color: #b45309;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.hsrl-badge-rose {
+  background-color: rgba(244, 63, 94, 0.12);
+  color: #be123c;
+  border: 1px solid rgba(244, 63, 94, 0.25);
+}
+
+.meta-chip {
+  font-family: var(--hsrl-font-mono);
+  font-size: 0.75rem;
+  color: var(--hsrl-text-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+.btn-hsrl-primary {
+  background-color: var(--hsrl-navy);
+  border-color: var(--hsrl-navy);
+  color: #ffffff;
+  font-weight: 600;
+  padding: 0.6rem 1.4rem;
+  border-radius: var(--hsrl-radius-md);
+  box-shadow: var(--hsrl-shadow-sm);
+  transition: all 0.15s ease;
+}
+
+.btn-hsrl-primary:hover {
+  background-color: var(--hsrl-navy-light);
+  border-color: var(--hsrl-navy-light);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.btn-hsrl-outline {
+  background-color: transparent;
+  border: 1px solid var(--hsrl-navy);
+  color: var(--hsrl-navy);
+  font-weight: 600;
+  padding: 0.6rem 1.4rem;
+  border-radius: var(--hsrl-radius-md);
+  transition: all 0.15s ease;
+}
+
+.btn-hsrl-outline:hover {
+  background-color: var(--hsrl-navy);
+  color: #ffffff;
+}
+
+.btn-hsrl-hydro {
+  background-color: var(--hsrl-hydro-dark);
+  border-color: var(--hsrl-hydro-dark);
+  color: #ffffff;
+  font-weight: 600;
+  padding: 0.6rem 1.4rem;
+  border-radius: var(--hsrl-radius-md);
+}
+
+.btn-hsrl-hydro:hover {
+  background-color: #0369a1;
+  border-color: #0369a1;
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   Hero Banner Styling
+   ========================================================================== */
+.hsrl-hero {
+  background: linear-gradient(135deg, #07192d 0%, #0a2540 60%, #0f3962 100%);
+  color: #ffffff;
+  padding: 4.5rem 0 4rem 0;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 3px solid var(--hsrl-hydro-dark);
+}
+
+.hsrl-hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(14, 165, 233, 0.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hsrl-hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  padding: 6px 14px;
+  border-radius: var(--hsrl-radius-pill);
+  font-family: var(--hsrl-font-mono);
+  font-size: 0.8rem;
+  color: var(--hsrl-hydro-light);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  margin-bottom: 1.25rem;
+}
+
+.hsrl-hero-title {
+  font-size: 2.75rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: 1.25rem;
+}
+
+.hsrl-hero-desc {
+  font-size: 1.15rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  max-width: 680px;
+}
+
+.hsrl-hero-stats {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-top: 2rem;
+  margin-top: 2.5rem;
+}
+
+.hero-stat-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-stat-num {
+  font-size: 2rem;
+  font-weight: 800;
+  font-family: var(--hsrl-font-mono);
+  color: #ffffff;
+  line-height: 1.1;
+}
+
+.hero-stat-label {
+  font-size: 0.8rem;
+  color: var(--hsrl-hydro-light);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 4px;
+}
+
+/* ==========================================================================
+   Page Headers (Sub-pages)
+   ========================================================================== */
+.hsrl-page-header {
+  background: linear-gradient(135deg, var(--hsrl-navy-dark), var(--hsrl-navy));
+  color: #ffffff;
+  padding: 3.25rem 0 2.75rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 2.5rem;
+}
+
+.hsrl-page-header .breadcrumb {
+  margin-bottom: 0.75rem;
+  font-size: 0.85rem;
+  font-family: var(--hsrl-font-mono);
+}
+
+.hsrl-page-header .breadcrumb a {
+  color: var(--hsrl-hydro-light);
+  text-decoration: none;
+}
+
+.hsrl-page-header .breadcrumb-item.active {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.hsrl-page-header h1 {
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+}
+
+.hsrl-page-header p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.05rem;
+  max-width: 700px;
+  margin-bottom: 0;
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.hsrl-footer {
+  background-color: var(--hsrl-navy-dark);
+  color: #cbd5e1;
+  padding: 4rem 0 2rem 0;
+  border-top: 3px solid var(--hsrl-hydro-dark);
+  font-size: 0.9rem;
+  margin-top: 5rem;
+}
+
+.hsrl-footer h5 {
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-bottom: 1.25rem;
+}
+
+.hsrl-footer ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.hsrl-footer ul li {
+  margin-bottom: 0.6rem;
+}
+
+.hsrl-footer ul li a {
+  color: #94a3b8;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.hsrl-footer ul li a:hover {
+  color: #ffffff;
+}
+
+.hsrl-footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 1.75rem;
+  margin-top: 3rem;
+  font-size: 0.8125rem;
+  color: #64748b;
+}
+
+/* ==========================================================================
+   Avatar & Initials Component
+   ========================================================================== */
+.hsrl-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--hsrl-radius-pill);
+  background: linear-gradient(135deg, var(--hsrl-navy), var(--hsrl-hydro-dark));
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.35rem;
+  font-family: var(--hsrl-font-mono);
+  box-shadow: var(--hsrl-shadow-sm);
+  object-fit: cover;
+}
+
+.hsrl-avatar-lg {
+  width: 140px;
+  height: 140px;
+  font-size: 2.5rem;
+}
+
+/* ==========================================================================
+   Filter Tab Pills
+   ========================================================================== */
+.filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 1.75rem;
+}
+
+.filter-pill-btn {
+  background: #ffffff;
+  border: 1px solid var(--hsrl-border);
+  color: var(--hsrl-text-secondary);
+  padding: 6px 14px;
+  border-radius: var(--hsrl-radius-pill);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.filter-pill-btn:hover,
+.filter-pill-btn.active {
+  background: var(--hsrl-navy);
+  border-color: var(--hsrl-navy);
+  color: #ffffff;
+}
