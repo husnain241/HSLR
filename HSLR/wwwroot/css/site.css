@@ -339,7 +339,7 @@ body {
    Hero Banner Styling
    ========================================================================== */
 .hsrl-hero {
-  background: linear-gradient(135deg, #07192d 0%, #0a2540 60%, #0f3962 100%);
+  background: linear-gradient(135deg, rgba(6, 18, 33, 0.88) 0%, rgba(7, 24, 44, 0.76) 50%, rgba(10, 37, 64, 0.62) 100%), url('../images/hero-bg.jpg') center center / cover no-repeat;
   color: #ffffff;
   padding: 4.5rem 0 4rem 0;
   position: relative;
@@ -354,7 +354,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: radial-gradient(circle at 80% 20%, rgba(14, 165, 233, 0.15) 0%, transparent 60%);
+  background: radial-gradient(circle at 80% 20%, rgba(14, 165, 233, 0.12) 0%, transparent 60%);
   pointer-events: none;
 }
 
