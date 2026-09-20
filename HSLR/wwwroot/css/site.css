@@ -427,6 +427,31 @@ body {
   margin-bottom: 2.5rem;
 }
 
+.hsrl-page-header-rs {
+  background: linear-gradient(135deg, rgba(6, 18, 33, 0.88) 0%, rgba(7, 24, 44, 0.78) 50%, rgba(10, 37, 64, 0.68) 100%), 
+              url('../images/remote-sensing-header.jpg') center center / cover no-repeat !important;
+  position: relative;
+  border-bottom: 2px solid var(--hsrl-hydro-dark);
+}
+
+.hsrl-avatar-img {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--hsrl-radius-pill);
+  object-fit: cover;
+  border: 2px solid var(--hsrl-hydro-light);
+  box-shadow: var(--hsrl-shadow-sm);
+}
+
+.hsrl-avatar-img-lg {
+  width: 125px;
+  height: 125px;
+  border-radius: var(--hsrl-radius-pill);
+  object-fit: cover;
+  border: 3px solid var(--hsrl-hydro-light);
+  box-shadow: var(--hsrl-shadow-md);
+}
+
 .hsrl-page-header .breadcrumb {
   margin-bottom: 0.75rem;
   font-size: 0.85rem;

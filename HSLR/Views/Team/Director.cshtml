@@ -5,7 +5,7 @@
     var projects = ViewBag.Projects as List<HSLR.Models.Entities.Project> ?? new();
 }
 
-<div class="hsrl-page-header">
+<div class="hsrl-page-header hsrl-page-header-rs">
     <div class="container">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -16,9 +16,7 @@
         </nav>
         <div class="row align-items-center g-4">
             <div class="col-md-auto">
-                <div class="hsrl-avatar hsrl-avatar-lg" style="width: 120px; height: 120px; font-size: 2.2rem; border: 3px solid rgba(255,255,255,0.3);">
-                    @Model.Initials
-                </div>
+                <img src="/images/team/professor.jpg" alt="@Model.Name" class="hsrl-avatar-img-lg" />
             </div>
             <div class="col-md">
                 <span class="badge bg-info text-dark font-monospace mb-2">@Model.Role</span>
