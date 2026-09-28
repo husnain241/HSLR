@@ -31,41 +31,6 @@ namespace HSLR.Controllers
                 .OrderBy(c => c.DisplayOrder)
                 .ToListAsync();
 
-            var featuredProjects = await _context.Projects
-                .Include(p => p.ProjectResearchAreas)
-                    .ThenInclude(pra => pra.ResearchDomain)
-                .Include(p => p.Technologies.Take(3))
-                .Where(p => p.Featured)
-                .OrderBy(p => p.DisplayOrder)
-                .Take(3)
-                .ToListAsync();
-
-            var featuredPublications = await _context.Publications
-                .Include(p => p.Authors.OrderBy(a => a.DisplayOrder))
-                .Include(p => p.PublicationResearchAreas)
-                    .ThenInclude(pra => pra.ResearchDomain)
-                .Where(p => p.Featured)
-                .OrderByDescending(p => p.Year)
-                .Take(4)
-                .ToListAsync();
-
-            var featuredPeople = await _context.People
-                .Include(p => p.ResearchInterests)
-                .Where(p => p.Featured && p.Category != PersonCategory.LabDirector)
-                .OrderBy(p => p.DisplayOrder)
-                .Take(4)
-                .ToListAsync();
-
-            var director = await _context.People
-                .Include(p => p.ResearchInterests)
-                .FirstOrDefaultAsync(p => p.Category == PersonCategory.LabDirector);
-
-            var upcomingEvents = await _context.Events
-                .Where(e => e.Status == EventStatus.Upcoming)
-                .OrderBy(e => e.EventDate)
-                .Take(3)
-                .ToListAsync();
-
             var totalPubs = await _context.Publications.CountAsync();
             var totalProjects = await _context.Projects.CountAsync();
             var totalScholars = await _context.People.CountAsync(p => p.Status == PersonStatus.Active);
@@ -76,11 +41,6 @@ namespace HSLR.Controllers
                 Config = config,
                 ResearchDomains = domains,
                 Capabilities = capabilities,
-                FeaturedProjects = featuredProjects,
-                FeaturedPublications = featuredPublications,
-                FeaturedPeople = featuredPeople,
-                Director = director,
-                UpcomingEvents = upcomingEvents,
                 TotalPublications = totalPubs,
                 TotalProjects = totalProjects,
                 TotalScholars = totalScholars,

@@ -339,7 +339,7 @@ body {
    Hero Banner Styling
    ========================================================================== */
 .hsrl-hero {
-  background: linear-gradient(135deg, #07192d 0%, #0a2540 60%, #0f3962 100%);
+  background: linear-gradient(135deg, rgba(6, 18, 33, 0.88) 0%, rgba(7, 24, 44, 0.76) 50%, rgba(10, 37, 64, 0.62) 100%), url('../images/hero-bg.jpg') center center / cover no-repeat;
   color: #ffffff;
   padding: 4.5rem 0 4rem 0;
   position: relative;
@@ -354,7 +354,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: radial-gradient(circle at 80% 20%, rgba(14, 165, 233, 0.15) 0%, transparent 60%);
+  background: radial-gradient(circle at 80% 20%, rgba(14, 165, 233, 0.12) 0%, transparent 60%);
   pointer-events: none;
 }
 
@@ -425,6 +425,105 @@ body {
   padding: 3.25rem 0 2.75rem 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   margin-bottom: 2.5rem;
+}
+
+.hsrl-page-header-rs {
+  background: linear-gradient(135deg, rgba(6, 18, 33, 0.88) 0%, rgba(7, 24, 44, 0.78) 50%, rgba(10, 37, 64, 0.68) 100%), 
+              url('../images/remote-sensing-header.jpg') center center / cover no-repeat !important;
+  position: relative;
+  border-bottom: 2px solid var(--hsrl-hydro-dark);
+}
+
+.hsrl-page-header-projects {
+  background: linear-gradient(135deg, rgba(6, 18, 33, 0.88) 0%, rgba(7, 24, 44, 0.78) 50%, rgba(10, 37, 64, 0.65) 100%), 
+              url('../images/projects-banner.jpg') center center / cover no-repeat !important;
+  position: relative;
+  border-bottom: 2px solid var(--hsrl-hydro-dark);
+}
+
+.hsrl-card-interactive {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.hsrl-card-interactive:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(7, 25, 45, 0.12) !important;
+  border-color: var(--hsrl-hydro-light) !important;
+}
+
+.pipeline-step-card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+  height: 100%;
+}
+
+.pipeline-step-card:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: var(--hsrl-hydro-light);
+  transform: translateY(-3px);
+}
+
+.pulse-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #10b981;
+  box-shadow: 0 0 0 rgba(16, 185, 129, 0.7);
+  animation: pulseAnimation 2s infinite;
+  margin-right: 6px;
+}
+
+.pulse-dot-cyan {
+  background-color: #0ea5e9;
+  box-shadow: 0 0 0 rgba(14, 165, 233, 0.7);
+  animation: pulseAnimationCyan 2s infinite;
+}
+
+@keyframes pulseAnimation {
+  0% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+@keyframes pulseAnimationCyan {
+  0% {
+    box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(14, 165, 233, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(14, 165, 233, 0);
+  }
+}
+
+.hsrl-avatar-img {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--hsrl-radius-pill);
+  object-fit: cover;
+  border: 2px solid var(--hsrl-hydro-light);
+  box-shadow: var(--hsrl-shadow-sm);
+}
+
+.hsrl-avatar-img-lg {
+  width: 125px;
+  height: 125px;
+  border-radius: var(--hsrl-radius-pill);
+  object-fit: cover;
+  border: 3px solid var(--hsrl-hydro-light);
+  box-shadow: var(--hsrl-shadow-md);
 }
 
 .hsrl-page-header .breadcrumb {
