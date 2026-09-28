@@ -1,5 +1,6 @@
 using HSLR.Data;
 using HSLR.Models.Entities;
+using HSLR.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,10 +12,12 @@ namespace HSLR.Areas.Admin.Controllers
     public class PeopleController : Controller
     {
         private readonly HsrlDbContext _context;
+        private readonly IImageStorageService _imageStorage;
 
-        public PeopleController(HsrlDbContext context)
+        public PeopleController(HsrlDbContext context, IImageStorageService imageStorage)
         {
             _context = context;
+            _imageStorage = imageStorage;
         }
 
         public async Task<IActionResult> Index()
@@ -35,7 +38,7 @@ namespace HSLR.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Person person, string? interestsList)
+        public async Task<IActionResult> Create(Person person, IFormFile? logoFile, string? interestsList)
         {
             if (string.IsNullOrWhiteSpace(person.Slug))
             {
@@ -45,6 +48,28 @@ namespace HSLR.Areas.Admin.Controllers
             if (await _context.People.AnyAsync(p => p.Slug == person.Slug))
             {
                 ModelState.AddModelError("Slug", "A person with this slug already exists.");
+            }
+
+            if (logoFile != null && logoFile.Length > 0)
+            {
+                try
+                {
+                    var savedUrl = await _imageStorage.SaveImageAsync(logoFile, "team");
+                    person.LogoUrl = savedUrl;
+                    person.PhotoUrl = savedUrl;
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                }
+            }
+            else if (!string.IsNullOrWhiteSpace(person.LogoUrl))
+            {
+                person.PhotoUrl ??= person.LogoUrl;
+            }
+            else if (!string.IsNullOrWhiteSpace(person.PhotoUrl))
+            {
+                person.LogoUrl ??= person.PhotoUrl;
             }
 
             if (!ModelState.IsValid)
@@ -83,7 +108,7 @@ namespace HSLR.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Person model, string? interestsList)
+        public async Task<IActionResult> Edit(int id, Person model, IFormFile? logoFile, string? interestsList)
         {
             if (id != model.Id) return NotFound();
 
@@ -92,6 +117,39 @@ namespace HSLR.Areas.Admin.Controllers
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             if (person == null) return NotFound();
+
+            if (logoFile != null && logoFile.Length > 0)
+            {
+                try
+                {
+                    var newUrl = await _imageStorage.SaveImageAsync(logoFile, "team");
+                    
+                    if (!string.IsNullOrWhiteSpace(person.LogoUrl) && person.LogoUrl.StartsWith("/images/team/"))
+                    {
+                        _imageStorage.DeleteImage(person.LogoUrl);
+                    }
+                    else if (!string.IsNullOrWhiteSpace(person.PhotoUrl) && person.PhotoUrl.StartsWith("/images/team/"))
+                    {
+                        _imageStorage.DeleteImage(person.PhotoUrl);
+                    }
+
+                    person.LogoUrl = newUrl;
+                    person.PhotoUrl = newUrl;
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                }
+            }
+            else
+            {
+                person.LogoUrl = model.LogoUrl;
+                person.PhotoUrl = !string.IsNullOrWhiteSpace(model.PhotoUrl) ? model.PhotoUrl : model.LogoUrl;
+                if (string.IsNullOrWhiteSpace(person.LogoUrl))
+                {
+                    person.LogoUrl = person.PhotoUrl;
+                }
+            }
 
             if (!ModelState.IsValid)
             {
@@ -110,7 +168,6 @@ namespace HSLR.Areas.Admin.Controllers
             person.CurrentAffiliation = model.CurrentAffiliation;
             person.Featured = model.Featured;
             person.Initials = model.Initials;
-            person.PhotoUrl = model.PhotoUrl;
             person.GoogleScholarUrl = model.GoogleScholarUrl;
             person.ResearchGateUrl = model.ResearchGateUrl;
             person.LinkedInUrl = model.LinkedInUrl;
@@ -142,6 +199,15 @@ namespace HSLR.Areas.Admin.Controllers
             var person = await _context.People.FindAsync(id);
             if (person != null)
             {
+                if (!string.IsNullOrWhiteSpace(person.LogoUrl) && person.LogoUrl.StartsWith("/images/team/"))
+                {
+                    _imageStorage.DeleteImage(person.LogoUrl);
+                }
+                else if (!string.IsNullOrWhiteSpace(person.PhotoUrl) && person.PhotoUrl.StartsWith("/images/team/"))
+                {
+                    _imageStorage.DeleteImage(person.PhotoUrl);
+                }
+
                 _context.People.Remove(person);
                 await _context.SaveChangesAsync();
                 TempData["SuccessMessage"] = $"Team member deleted successfully.";

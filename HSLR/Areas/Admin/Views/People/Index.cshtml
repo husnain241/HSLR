@@ -29,10 +29,11 @@
             <tbody>
                 @foreach (var p in Model)
                 {
+                    var memberImg = !string.IsNullOrWhiteSpace(p.LogoUrl) ? p.LogoUrl : (!string.IsNullOrWhiteSpace(p.PhotoUrl) ? p.PhotoUrl : "/images/team/professor.jpg");
                     <tr>
                         <td class="ps-4">
                             <div class="d-flex align-items-center gap-2">
-                                <img src="/images/team/professor.jpg" alt="@p.Name" class="rounded-circle flex-shrink-0" style="width: 36px; height: 36px; object-fit: cover; border: 1px solid var(--hsrl-hydro-light);" />
+                                <img src="@memberImg" alt="@p.Name" class="rounded-circle flex-shrink-0" style="width: 36px; height: 36px; object-fit: cover; border: 1px solid var(--hsrl-hydro-light);" onerror="this.src='/images/team/professor.jpg';" />
                                 <div>
                                     <div class="fw-bold text-navy">@p.Name</div>
                                     <small class="text-muted font-monospace">@p.Slug</small>

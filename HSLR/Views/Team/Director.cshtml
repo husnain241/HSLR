@@ -16,7 +16,10 @@
         </nav>
         <div class="row align-items-center g-4">
             <div class="col-md-auto">
-                <img src="/images/team/professor.jpg" alt="@Model.Name" class="hsrl-avatar-img-lg" />
+                @{
+                    var directorImg = !string.IsNullOrWhiteSpace(Model.LogoUrl) ? Model.LogoUrl : (!string.IsNullOrWhiteSpace(Model.PhotoUrl) ? Model.PhotoUrl : "/images/team/professor.jpg");
+                }
+                <img src="@directorImg" alt="@Model.Name" class="hsrl-avatar-img-lg" onerror="this.src='/images/team/professor.jpg';" />
             </div>
             <div class="col-md">
                 <span class="badge bg-info text-dark font-monospace mb-2">@Model.Role</span>

@@ -16,7 +16,7 @@
 </div>
 
 <div class="card border-0 rounded-4 shadow-sm p-4 bg-white">
-    <form asp-action="Create" method="post">
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
         @Html.AntiForgeryToken()
         <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small mb-3"></div>
 
@@ -69,6 +69,18 @@
             <div class="col-12">
                 <label asp-for="CurrentAffiliation" class="form-label small fw-bold font-monospace">Current Institutional Affiliation</label>
                 <input asp-for="CurrentAffiliation" class="form-control" placeholder="CEWRE, UET Lahore" />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label small fw-bold font-monospace">Logo / Profile Image (Upload File)</label>
+                <input type="file" name="logoFile" class="form-control" accept="image/*" />
+                <span class="form-text small text-muted">Accepts JPG, PNG, WEBP, or SVG image file.</span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="LogoUrl" class="form-label small fw-bold font-monospace">Or Logo Image URL</label>
+                <input asp-for="LogoUrl" class="form-control" placeholder="/images/team/member.jpg or https://..." />
+                <span asp-validation-for="LogoUrl" class="text-danger small"></span>
             </div>
 
             <div class="col-12">

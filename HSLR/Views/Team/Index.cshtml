@@ -59,7 +59,10 @@
                 <div class="hsrl-card">
                     <div class="hsrl-card-body d-flex flex-column">
                         <div class="d-flex align-items-start gap-3 mb-3">
-                            <img src="/images/team/professor.jpg" alt="@person.Name" class="hsrl-avatar-img flex-shrink-0" />
+                            @{
+                                var personImg = !string.IsNullOrWhiteSpace(person.LogoUrl) ? person.LogoUrl : (!string.IsNullOrWhiteSpace(person.PhotoUrl) ? person.PhotoUrl : "/images/team/professor.jpg");
+                            }
+                            <img src="@personImg" alt="@person.Name" class="hsrl-avatar-img flex-shrink-0" onerror="this.src='/images/team/professor.jpg';" />
                             <div>
                                 <span class="badge @(person.Category == HSLR.Models.Entities.PersonCategory.LabDirector ? "bg-primary" : "bg-light text-dark border") font-monospace small mb-1">
                                     @person.Role

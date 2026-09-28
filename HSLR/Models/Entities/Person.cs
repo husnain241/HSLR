@@ -18,6 +18,9 @@ namespace HSLR.Models.Entities
         [MaxLength(500)]
         public string? PhotoUrl { get; set; }
 
+        [MaxLength(500)]
+        public string? LogoUrl { get; set; }
+
         [Required, MaxLength(150)]
         public string Role { get; set; } = string.Empty;
 

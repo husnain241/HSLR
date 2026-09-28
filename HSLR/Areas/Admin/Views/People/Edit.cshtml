@@ -17,7 +17,7 @@
 </div>
 
 <div class="card border-0 rounded-4 shadow-sm p-4 bg-white">
-    <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+    <form asp-action="Edit" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data">
         @Html.AntiForgeryToken()
         <input type="hidden" asp-for="Id" />
         <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small mb-3"></div>
@@ -71,6 +71,39 @@
             <div class="col-12">
                 <label asp-for="CurrentAffiliation" class="form-label small fw-bold font-monospace">Institutional Affiliation</label>
                 <input asp-for="CurrentAffiliation" class="form-control" />
+            </div>
+
+            <div class="col-12">
+                <label class="form-label small fw-bold font-monospace">Current Logo / Profile Image</label>
+                <div class="d-flex align-items-center gap-3 mb-2 p-2 bg-light rounded-3 border">
+                    @if (!string.IsNullOrWhiteSpace(Model.LogoUrl) || !string.IsNullOrWhiteSpace(Model.PhotoUrl))
+                    {
+                        var currentImg = !string.IsNullOrWhiteSpace(Model.LogoUrl) ? Model.LogoUrl : Model.PhotoUrl;
+                        <img src="@currentImg" alt="@Model.Name" class="rounded-3 border bg-white p-1" style="width: 56px; height: 56px; object-fit: cover;" />
+                    }
+                    else
+                    {
+                        <div class="rounded-3 border bg-white d-flex align-items-center justify-content-center text-muted font-monospace small" style="width: 56px; height: 56px;">
+                            No Logo
+                        </div>
+                    }
+                    <div class="small">
+                        <div class="fw-semibold text-navy">Current File / Path:</div>
+                        <span class="font-monospace text-muted">@(!string.IsNullOrWhiteSpace(Model.LogoUrl) ? Model.LogoUrl : (!string.IsNullOrWhiteSpace(Model.PhotoUrl) ? Model.PhotoUrl : "No image uploaded"))</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label small fw-bold font-monospace">Upload New Logo / Image File</label>
+                <input type="file" name="logoFile" class="form-control" accept="image/*" />
+                <span class="form-text small text-muted">Leave empty to keep existing image. Supports JPG, PNG, WEBP, SVG.</span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="LogoUrl" class="form-label small fw-bold font-monospace">Or Logo Image URL</label>
+                <input asp-for="LogoUrl" class="form-control" placeholder="/images/team/member.jpg or https://..." />
+                <span asp-validation-for="LogoUrl" class="text-danger small"></span>
             </div>
 
             <div class="col-12">
