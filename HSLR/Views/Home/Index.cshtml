@@ -51,86 +51,117 @@
             </div>
         </div>
 
-        <!-- Metric Numbers -->
-        <div class="hsrl-hero-stats">
-            <div class="row g-4 text-center text-sm-start">
-                <div class="col-6 col-md-3">
-                    <div class="hero-stat-item">
-                        <span class="hero-stat-num">@Model.TotalPublications+</span>
-                        <span class="hero-stat-label">Peer-Reviewed Papers</span>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="hero-stat-item">
-                        <span class="hero-stat-num">@Model.TotalProjects</span>
-                        <span class="hero-stat-label">Funded & Applied Projects</span>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="hero-stat-item">
-                        <span class="hero-stat-num">@Model.TotalDomains</span>
-                        <span class="hero-stat-label">Core Research Pillars</span>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="hero-stat-item">
-                        <span class="hero-stat-num">@Model.TotalScholars+</span>
-                        <span class="hero-stat-label">Faculty & Graduate Researchers</span>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </section>
 
-<!-- Scientific Pipeline / Approach Section -->
+<!-- Research Metrics Section -->
 <section class="py-5 bg-white border-bottom">
     <div class="container py-4">
         <div class="section-header text-center">
-            <span class="section-eyebrow"><i class="bi bi-diagram-3-fill"></i> Lab Methodology</span>
-            <h2 class="section-title">The HSRL Scientific Pipeline</h2>
+            <span class="section-eyebrow">
+                <i class="bi bi-bar-chart-fill"></i> Research at a Glance
+            </span>
+            <h2 class="section-title">HSRL Research Impact</h2>
             <p class="section-lead">
-                An integrated, data-driven framework connecting orbital space sensors to in-situ ground realities and actionable policy decision tools.
+                A snapshot of the laboratory's research output, funded projects,
+                core research areas, and research community.
             </p>
         </div>
 
         <div class="row g-4 text-center">
+
+            <!-- Peer-Reviewed Papers -->
             <div class="col-md-3">
                 <div class="p-4 rounded-4 bg-light h-100 border">
-                    <div class="hsrl-brand-icon mx-auto mb-3" style="background: var(--hsrl-navy);">
-                        <i class="bi bi-broadcast-pin"></i>
+                    <div class="hsrl-brand-icon mx-auto mb-3"
+                         style="background: var(--hsrl-navy);">
+                        <i class="bi bi-journal-text"></i>
                     </div>
-                    <h5 class="fw-bold text-navy mb-2">1. Spaceborne Sensing</h5>
-                    <p class="text-muted small mb-0">Multi-satellite radar altimetry, SAR backscatter, optical imagery, and gravity anomalies.</p>
+
+                    <h2 class="fw-bold text-navy mb-1">
+                        @Model.TotalPublications+
+                    </h2>
+
+                    <h5 class="fw-bold text-navy mb-2">
+                        Peer-Reviewed Papers
+                    </h5>
+
+                    <p class="text-muted small mb-0">
+                        Published peer-reviewed research contributing to
+                        scientific knowledge and innovation.
+                    </p>
                 </div>
             </div>
+
+            <!-- Funded & Applied Projects -->
             <div class="col-md-3">
                 <div class="p-4 rounded-4 bg-light h-100 border">
-                    <div class="hsrl-brand-icon mx-auto mb-3" style="background: #0284c7;">
-                        <i class="bi bi-water"></i>
+                    <div class="hsrl-brand-icon mx-auto mb-3"
+                         style="background: #0284c7;">
+                        <i class="bi bi-kanban-fill"></i>
                     </div>
-                    <h5 class="fw-bold text-navy mb-2">2. Numerical Hydraulics</h5>
-                    <p class="text-muted small mb-0">High-resolution 2D unsteady hydrodynamic modeling (HEC-RAS) and catchment water balance.</p>
+
+                    <h2 class="fw-bold text-navy mb-1">
+                        @Model.TotalProjects
+                    </h2>
+
+                    <h5 class="fw-bold text-navy mb-2">
+                        Funded & Applied Projects
+                    </h5>
+
+                    <p class="text-muted small mb-0">
+                        Funded research initiatives focused on practical
+                        scientific and environmental challenges.
+                    </p>
                 </div>
             </div>
+
+            <!-- Core Research Pillars -->
             <div class="col-md-3">
                 <div class="p-4 rounded-4 bg-light h-100 border">
-                    <div class="hsrl-brand-icon mx-auto mb-3" style="background: #0d9488;">
-                        <i class="bi bi-cpu"></i>
+                    <div class="hsrl-brand-icon mx-auto mb-3"
+                         style="background: #0d9488;">
+                        <i class="bi bi-diagram-3-fill"></i>
                     </div>
-                    <h5 class="fw-bold text-navy mb-2">3. Physics-Informed AI</h5>
-                    <p class="text-muted small mb-0">Recurrent neural networks, transformers, and PINNs obeying conservation laws for forecasting.</p>
+
+                    <h2 class="fw-bold text-navy mb-1">
+                        @Model.TotalDomains
+                    </h2>
+
+                    <h5 class="fw-bold text-navy mb-2">
+                        Core Research Pillars
+                    </h5>
+
+                    <p class="text-muted small mb-0">
+                        Core research domains supporting the laboratory's
+                        multidisciplinary scientific work.
+                    </p>
                 </div>
             </div>
+
+            <!-- Faculty & Graduate Researchers -->
             <div class="col-md-3">
                 <div class="p-4 rounded-4 bg-light h-100 border">
-                    <div class="hsrl-brand-icon mx-auto mb-3" style="background: #0f172a;">
-                        <i class="bi bi-shield-check"></i>
+                    <div class="hsrl-brand-icon mx-auto mb-3"
+                         style="background: #0f172a;">
+                        <i class="bi bi-people-fill"></i>
                     </div>
-                    <h5 class="fw-bold text-navy mb-2">4. Decision Support</h5>
-                    <p class="text-muted small mb-0">Operational hazard bulletins, early warnings, and aquifer management guidelines for agencies.</p>
+
+                    <h2 class="fw-bold text-navy mb-1">
+                        @Model.TotalScholars+
+                    </h2>
+
+                    <h5 class="fw-bold text-navy mb-2">
+                        Faculty & Graduate Researchers
+                    </h5>
+
+                    <p class="text-muted small mb-0">
+                        Faculty members and graduate researchers contributing
+                        to HSRL's research activities.
+                    </p>
                 </div>
             </div>
+
         </div>
     </div>
 </section>
