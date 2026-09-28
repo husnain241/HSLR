@@ -62,11 +62,11 @@ app.UseResponseCaching();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Seed Database
-using (var scope = app.Services.CreateScope())
-{
-    await HsrlDbSeeder.SeedAsync(scope.ServiceProvider);
-}
+//// Seed Database
+//using (var scope = app.Services.CreateScope())
+//{
+//    await HsrlDbSeeder.SeedAsync(scope.ServiceProvider);
+//}
 
 // Route mappings
 app.MapControllerRoute(

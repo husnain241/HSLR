@@ -4,7 +4,7 @@
     var relatedPubs = ViewBag.RelatedPublications as List<HSLR.Models.Entities.Publication> ?? new();
 }
 
-<div class="hsrl-page-header">
+<div class="hsrl-page-header hsrl-page-header-projects">
     <div class="container">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -13,8 +13,12 @@
                 <li class="breadcrumb-item active" aria-current="page">Case Study</li>
             </ol>
         </nav>
-        <div class="d-flex flex-wrap gap-2 mb-2">
+        <div class="d-flex flex-wrap gap-2 mb-2 align-items-center">
             <span class="hsrl-badge @(Model.Status == HSLR.Models.Entities.ProjectStatus.Active ? "hsrl-badge-success" : "hsrl-badge-hydro")">
+                @if (Model.Status == HSLR.Models.Entities.ProjectStatus.Active)
+                {
+                    <span class="pulse-dot"></span>
+                }
                 @Model.Status
             </span>
             <span class="badge bg-light text-dark border font-monospace">@Model.ProjectType</span>

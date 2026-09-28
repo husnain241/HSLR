@@ -7,7 +7,7 @@
     var domains = ViewBag.Domains as List<HSLR.Models.Entities.ResearchDomain> ?? new();
 }
 
-<div class="hsrl-page-header">
+<div class="hsrl-page-header hsrl-page-header-projects">
     <div class="container">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -15,6 +15,11 @@
                 <li class="breadcrumb-item active" aria-current="page">Projects</li>
             </ol>
         </nav>
+        <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="badge bg-info bg-opacity-25 text-info border border-info border-opacity-50 font-monospace">
+                <i class="bi bi-satellite me-1"></i> Earth Observation & Numerical Modeling
+            </span>
+        </div>
         <h1>Research & Applied Projects</h1>
         <p>
             Explore our portfolio of fundamental, applied, and collaborative research initiatives addressing water resources, flood inundation, and cryospheric sensing.
@@ -24,10 +29,10 @@
 
 <div class="container pb-5">
     <!-- Filters Card -->
-    <div class="card border rounded-4 shadow-sm p-4 mb-4 bg-white">
+    <div class="card border rounded-4 shadow-sm p-4 mb-4 bg-white hsrl-card-interactive">
         <form method="get" asp-action="Index" class="row g-3 align-items-end">
             <div class="col-md-4">
-                <label class="form-label small fw-bold text-navy font-monospace">Project Status</label>
+                <label class="form-label small fw-bold text-navy font-monospace"><i class="bi bi-lightning-charge me-1 text-primary"></i> Project Status</label>
                 <select name="status" class="form-select">
                     <option value="">All Statuses</option>
                     @foreach (var s in Enum.GetValues<HSLR.Models.Entities.ProjectStatus>())
@@ -38,7 +43,7 @@
             </div>
 
             <div class="col-md-4">
-                <label class="form-label small fw-bold text-navy font-monospace">Project Type</label>
+                <label class="form-label small fw-bold text-navy font-monospace"><i class="bi bi-tag me-1 text-primary"></i> Project Type</label>
                 <select name="type" class="form-select">
                     <option value="">All Types</option>
                     @foreach (var t in Enum.GetValues<HSLR.Models.Entities.ProjectType>())
@@ -49,7 +54,7 @@
             </div>
 
             <div class="col-md-4">
-                <label class="form-label small fw-bold text-navy font-monospace">Research Domain</label>
+                <label class="form-label small fw-bold text-navy font-monospace"><i class="bi bi-compass me-1 text-primary"></i> Research Domain</label>
                 <select name="domainId" class="form-select">
                     <option value="">All Domains</option>
                     @foreach (var d in domains)
@@ -67,8 +72,13 @@
     </div>
 
     <!-- Showing count -->
-    <div class="mb-4 small text-muted font-monospace">
-        Showing <strong>@Model.Count</strong> research initiatives
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="small text-muted font-monospace">
+            Showing <strong class="text-navy">@Model.Count</strong> active research initiatives
+        </div>
+        <span class="badge bg-success-subtle text-success border border-success-subtle font-monospace">
+            <span class="pulse-dot"></span> Live Data Portfolio
+        </span>
     </div>
 
     <!-- Projects Grid -->
@@ -76,11 +86,19 @@
         @foreach (var proj in Model)
         {
             <div class="col-lg-6">
-                <div class="hsrl-card">
+                <div class="hsrl-card hsrl-card-interactive h-100 shadow-sm">
                     <div class="hsrl-card-body d-flex flex-column">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
                             <span class="hsrl-badge @(proj.Status == HSLR.Models.Entities.ProjectStatus.Active ? "hsrl-badge-success" : "hsrl-badge-hydro")">
-                                <i class="bi bi-record-circle-fill"></i> @proj.Status
+                                @if (proj.Status == HSLR.Models.Entities.ProjectStatus.Active)
+                                {
+                                    <span class="pulse-dot"></span>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-check-circle-fill me-1"></i>
+                                }
+                                @proj.Status
                             </span>
                             <span class="badge bg-light text-muted border font-monospace">@proj.ProjectType &bull; @proj.Year</span>
                         </div>
@@ -91,11 +109,13 @@
                             </a>
                         </h4>
 
-                        <div class="small text-secondary mb-3">
-                            <i class="bi bi-geo-alt-fill text-danger me-1"></i> <strong>Study Area:</strong> @proj.StudyArea, @proj.Country
+                        <div class="small text-secondary mb-3 d-flex align-items-center gap-1">
+                            <i class="bi bi-geo-alt-fill text-danger"></i>
+                            <strong>Study Area:</strong>
+                            <span class="badge bg-light text-dark border font-monospace ms-1">@proj.StudyArea, @proj.Country</span>
                         </div>
 
-                        <p class="small text-muted mb-3 flex-grow-1">
+                        <p class="small text-muted mb-3 flex-grow-1" style="line-height: 1.6;">
                             @(proj.Subtitle ?? proj.Challenge)
                         </p>
 
@@ -116,15 +136,15 @@
                             <div class="d-flex flex-wrap gap-1 pt-2 border-top">
                                 @foreach (var tech in proj.Technologies)
                                 {
-                                    <span class="badge bg-light text-dark border font-monospace" style="font-size: 0.7rem;">@tech.TechnologyName</span>
+                                    <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle font-monospace" style="font-size: 0.7rem;"><i class="bi bi-cpu me-1"></i>@tech.TechnologyName</span>
                                 }
                             </div>
                         }
                     </div>
-                    <div class="hsrl-card-footer d-flex justify-content-between align-items-center">
-                        <span class="small text-muted font-monospace">Case Study</span>
+                    <div class="hsrl-card-footer d-flex justify-content-between align-items-center bg-light bg-opacity-50">
+                        <span class="small text-muted font-monospace"><i class="bi bi-file-earmark-code me-1 text-primary"></i>Case Study</span>
                         <a asp-action="Details" asp-route-slug="@proj.Slug" class="btn btn-sm btn-hsrl-outline">
-                            View Case Study <i class="bi bi-arrow-right"></i>
+                            View Case Study <i class="bi bi-arrow-right ms-1"></i>
                         </a>
                     </div>
                 </div>
