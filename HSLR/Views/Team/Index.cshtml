@@ -4,7 +4,7 @@
     var selectedCategory = ViewBag.SelectedCategory as HSLR.Models.Entities.PersonCategory?;
 }
 
-<div class="hsrl-page-header">
+<div class="hsrl-page-header hsrl-page-header-rs">
     <div class="container">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -59,9 +59,7 @@
                 <div class="hsrl-card">
                     <div class="hsrl-card-body d-flex flex-column">
                         <div class="d-flex align-items-start gap-3 mb-3">
-                            <div class="hsrl-avatar flex-shrink-0" style="background: @(person.Category == HSLR.Models.Entities.PersonCategory.LabDirector ? "linear-gradient(135deg, var(--hsrl-navy), var(--hsrl-hydro-dark))" : "linear-gradient(135deg, #334155, #64748b)");">
-                                @person.Initials
-                            </div>
+                            <img src="/images/team/professor.jpg" alt="@person.Name" class="hsrl-avatar-img flex-shrink-0" />
                             <div>
                                 <span class="badge @(person.Category == HSLR.Models.Entities.PersonCategory.LabDirector ? "bg-primary" : "bg-light text-dark border") font-monospace small mb-1">
                                     @person.Role
