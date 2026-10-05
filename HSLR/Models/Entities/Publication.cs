@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HSLR.Models.Entities
 {
@@ -28,6 +29,25 @@ namespace HSLR.Models.Entities
 
         [MaxLength(200)]
         public string? CitationMetrics { get; set; }
+
+        [MaxLength(500)]
+        public string? Image1Url { get; set; }
+
+        [MaxLength(500)]
+        public string? Image2Url { get; set; }
+
+        [MaxLength(500)]
+        public string? Image3Url { get; set; }
+
+        [MaxLength(500)]
+        public string? Image4Url { get; set; }
+
+        [NotMapped]
+        public string? ImageUrl
+        {
+            get => Image1Url;
+            set => Image1Url = value;
+        }
 
         // Navigations
         public ICollection<PublicationAuthor> Authors { get; set; } = new List<PublicationAuthor>();
