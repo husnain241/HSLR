@@ -1,3 +1,46 @@
+<style>
+    /* ===== Home: Image Carousel ===== */
+    .hsrl-carousel {
+        border-radius: 1.25rem; /* baqi cards (rounded-4) ke jaisa */
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(10, 37, 64, 0.15);
+        background: var(--hsrl-navy, #0a2540);
+    }
+
+        .hsrl-carousel .carousel-item img {
+            width: 100%;
+            height: 480px; /* desktop */
+            object-fit: cover; /* stretch nahi hogi, crop hogi */
+            object-position: center;
+        }
+    /* Carousel image click + modal */
+    .carousel-img-trigger {
+        cursor: zoom-in;
+    }
+
+    .image-detail-img {
+        max-height: 380px;
+        object-fit: cover;
+    }
+
+    @@media (max-width: 991.98px) {
+        .hsrl-carousel .carousel-item img {
+            height: 360px;
+        }
+        /* tablet */
+    }
+
+    @@media (max-width: 575.98px) {
+        .hsrl-carousel {
+            border-radius: 0.75rem;
+        }
+
+            .hsrl-carousel .carousel-item img {
+                height: 220px;
+            }
+        /* mobile */
+    }
+</style>
 @model HSLR.Models.ViewModels.HomeIndexViewModel
 @{
     ViewData["Title"] = "Hydroclimatic Sensing Research Lab";
@@ -53,7 +96,83 @@
 
     </div>
 </section>
+<!-- Image carousel Section -->
+<section class="hsrl-carousel-section py-5 bg-white">
+    <div class="container">
+        <div id="imageCarousel" class="carousel slide hsrl-carousel" data-bs-ride="carousel">
 
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="https://picsum.photos/seed/hsrl1/1600/700"
+                         class="d-block w-100 carousel-img-trigger"
+                         alt="Flood mapping using Sentinel-1"
+                         data-title="Flood Mapping using Sentinel-1"
+                         data-description="SAR-based flood extent mapping across the Indus floodplain to support rapid disaster response."
+                         data-category="Fieldwork"
+                         data-location="Indus Basin, Pakistan"
+                         data-date="August 2025">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://picsum.photos/seed/hsrl2/1600/700"
+                         class="d-block w-100 carousel-img-trigger"
+                         alt="Glacier monitoring"
+                         data-title="Glacier Monitoring"
+                         data-description="Tracking glacier mass change and glacial lakes in the Karakoram using satellite data."
+                         data-category="Research"
+                         data-location="Gilgit-Baltistan"
+                         data-date="June 2025">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://picsum.photos/seed/hsrl4/1600/700"
+                         class="d-block w-100 carousel-img-trigger"
+                         alt="Groundwater assessment"
+                         data-title="Groundwater Assessment"
+                         data-description="GRACE-based analysis of aquifer depletion across Punjab and Sindh."
+                         data-category="Workshops"
+                         data-location="CEWRE, UET Lahore"
+                         data-date="March 2025">
+                </div>
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#imageCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Model Section for Section -->
+<!-- Image Detail Modal -->
+<div class="modal fade" id="imageDetailModal" tabindex="-1" aria-labelledby="imageDetailTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content border-0 rounded-4 overflow-hidden">
+            <img id="imageDetailImg" src="" alt="" class="w-100 image-detail-img">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-navy" id="imageDetailTitle"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <span id="imageDetailCategory" class="badge bg-secondary-subtle text-secondary font-monospace mb-3"></span>
+                <p id="imageDetailDescription" class="text-muted"></p>
+                <div class="d-flex flex-wrap gap-4 small text-muted pt-2 border-top">
+                    <span><i class="bi bi-geo-alt-fill text-danger me-1"></i><span id="imageDetailLocation"></span></span>
+                    <span><i class="bi bi-calendar-event me-1"></i><span id="imageDetailDate"></span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Research Metrics Section -->
 <section class="py-5 bg-white border-bottom">
     <div class="container py-4">
@@ -334,3 +453,35 @@
         </div>
     </div>
 </section>
+
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const modalEl = document.getElementById('imageDetailModal');
+            const modal = new bootstrap.Modal(modalEl);
+
+            document.querySelectorAll('.carousel-img-trigger').forEach(function (img) {
+                img.addEventListener('click', function () {
+                    document.getElementById('imageDetailImg').src = img.src;
+                    document.getElementById('imageDetailImg').alt = img.alt;
+                    document.getElementById('imageDetailTitle').textContent = img.dataset.title || '';
+                    document.getElementById('imageDetailDescription').textContent = img.dataset.description || '';
+                    document.getElementById('imageDetailCategory').textContent = img.dataset.category || '';
+                    document.getElementById('imageDetailLocation').textContent = img.dataset.location || '';
+                    document.getElementById('imageDetailDate').textContent = img.dataset.date || '';
+                    modal.show();
+                });
+            });
+
+            // Modal khulne par carousel ruk jaye, band hone par dobara chale
+            const carouselEl = document.getElementById('imageCarousel');
+            modalEl.addEventListener('show.bs.modal', function () {
+                bootstrap.Carousel.getOrCreateInstance(carouselEl).pause();
+            });
+            modalEl.addEventListener('hidden.bs.modal', function () {
+                bootstrap.Carousel.getOrCreateInstance(carouselEl).cycle();
+            });
+        });
+    </script>
+}
