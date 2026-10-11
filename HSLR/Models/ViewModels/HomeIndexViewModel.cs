@@ -8,6 +8,7 @@ namespace HSLR.Models.ViewModels
         public List<ResearchDomain> ResearchDomains { get; set; } = new();
         public List<Capability> Capabilities { get; set; } = new();
         public List<Publication> FeaturedPublications { get; set; } = new();
+        public List<Project> RelatedProjects { get; set; } = new();
 
         public int TotalPublications { get; set; }
         public int TotalProjects { get; set; }
