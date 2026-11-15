@@ -21,6 +21,31 @@ namespace HSLR.Controllers
         {
             var config = await _context.SiteConfigs.FirstOrDefaultAsync() ?? new SiteConfig();
 
+            var featuredPubs = await _context.Publications
+                .AsNoTracking()
+                .OrderByDescending(p => p.Year)       
+                .ThenByDescending(p => p.Id)          
+                .Include(p => p.Authors)
+                .Include(p => p.PublicationResearchAreas)
+                    .ThenInclude(pra => pra.ResearchDomain)
+                    .ToListAsync();
+            var domainIds = featuredPubs
+                .SelectMany(p => p.PublicationResearchAreas)
+                .Select(pra => pra.ResearchDomainId)
+                .Distinct()
+                .ToList();
+            
+            var relatedProjects = await _context.Projects
+                .AsNoTracking()
+                .Where(p => p.ProjectResearchAreas.Any(pra => domainIds.Contains(pra.ResearchDomainId)))
+                .Include(p => p.Objectives.OrderBy(o => o.DisplayOrder))
+                .Include(p => p.KeyFindings.OrderBy(f => f.DisplayOrder))
+                .Take(6)
+                .ToListAsync();
+
+
+
+
             var domains = await _context.ResearchDomains
                 .Include(d => d.FocusTopics)
                 .OrderBy(d => d.DisplayOrder)
@@ -41,7 +66,9 @@ namespace HSLR.Controllers
                 Config = config,
                 ResearchDomains = domains,
                 Capabilities = capabilities,
+                FeaturedPublications = featuredPubs,
                 TotalPublications = totalPubs,
+                RelatedProjects = relatedProjects,
                 TotalProjects = totalProjects,
                 TotalScholars = totalScholars,
                 TotalDomains = totalDomains
